@@ -20,4 +20,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="3.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SongsDatabase\SongsDatabase.csproj" />
+  </ItemGroup>
+
 </Project>
