@@ -56,13 +56,17 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { ToDoListComponent } from './Components/to-do-list/to-do-list.component';
 import { TextFileImportExportComponent } from './Components/text-file-import-export/text-file-import-export.component';
 import { LoginComponent } from './Components/login/login.component';
+
 import { MainTablesComponent } from './Components/Tables/main-tables/main-tables.component';
+import { AlbumPlayedTableComponent } from './Components/Tables/album-played-table/album-played-table.component';
 
 import { AppRoutingModule } from './app-routing.module';
 
 import { LayoutComponent } from './Layout/layout/layout.component';
 import { SideNavigationListComponent } from './Layout/side-navigation-list/side-navigation-list.component';
 import { NavigationHeaderComponent } from './Layout/navigation-header/navigation-header.component';
+
+import { DataModelService } from './Services/data-model.service';
 
 @NgModule({
     declarations:
@@ -74,6 +78,7 @@ import { NavigationHeaderComponent } from './Layout/navigation-header/navigation
         TextFileImportExportComponent,
 
         MainTablesComponent,
+        AlbumPlayedTableComponent,
 
         LayoutComponent,
         SideNavigationListComponent,
@@ -130,7 +135,7 @@ import { NavigationHeaderComponent } from './Layout/navigation-header/navigation
 
         AppRoutingModule
   ],
-  providers: [],
+  providers: [DataModelService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

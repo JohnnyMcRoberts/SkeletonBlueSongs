@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SongsBurger.Controllers.Settings;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace SongsBurger
@@ -24,6 +25,9 @@ namespace SongsBurger
             services.AddMvc()
                 .AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore) //ignores self reference object 
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1); //validate api rules
+
+            // Add our Config so the objects can be injected
+            services.Configure<MongoDbSettings>(Configuration.GetSection("MongoDbSettings"));
 
             services.AddSwaggerGen(c =>
             {
