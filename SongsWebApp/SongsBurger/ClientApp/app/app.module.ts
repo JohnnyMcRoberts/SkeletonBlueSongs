@@ -6,7 +6,8 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import {
+import
+{
     MatAutocompleteModule,
     MatBadgeModule,
     MatBottomSheetModule,
@@ -53,8 +54,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { ToDoListComponent } from './Components/to-do-list/to-do-list.component';
+import { TextFileImportExportComponent } from './Components/text-file-import-export/text-file-import-export.component';
 import { LoginComponent } from './Components/login/login.component';
+
 import { MainTablesComponent } from './Components/Tables/main-tables/main-tables.component';
+import { AlbumPlayedTableComponent } from './Components/Tables/album-played-table/album-played-table.component';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -62,19 +66,23 @@ import { LayoutComponent } from './Layout/layout/layout.component';
 import { SideNavigationListComponent } from './Layout/side-navigation-list/side-navigation-list.component';
 import { NavigationHeaderComponent } from './Layout/navigation-header/navigation-header.component';
 
+import { DataModelService } from './Services/data-model.service';
+
 @NgModule({
     declarations:
     [
-      AppComponent,
+        AppComponent,
 
-      ToDoListComponent,
-      LoginComponent,
+        ToDoListComponent,
+        LoginComponent,
+        TextFileImportExportComponent,
 
-      MainTablesComponent,
+        MainTablesComponent,
+        AlbumPlayedTableComponent,
 
-      LayoutComponent,
-      SideNavigationListComponent,
-      NavigationHeaderComponent
+        LayoutComponent,
+        SideNavigationListComponent,
+        NavigationHeaderComponent
     ],
     imports:
     [
@@ -127,7 +135,7 @@ import { NavigationHeaderComponent } from './Layout/navigation-header/navigation
 
         AppRoutingModule
   ],
-  providers: [],
+  providers: [DataModelService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

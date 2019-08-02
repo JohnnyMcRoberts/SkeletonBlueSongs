@@ -1,11 +1,10 @@
-﻿using System;
-
-namespace SongsDatabase.Test
+﻿namespace SongsDatabase.Test.Security
 {
+    using System;
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     using SongsDatabase.Security;
-
-
 
     [TestClass]
     public class SimpleHashTest

@@ -1,1 +1,25 @@
-﻿<div style="border: 1px solid red">ToDoList Component</div>
+﻿<div class="padded-div">
+
+  <p>Single-page application that shows the songs played, the current state is:</p>
+
+  <div class="left-div">
+    <mat-list>
+      <h3 mat-subheader>To Do</h3>
+      <mat-list-item *ngFor="let toDo of toDoItems">
+        <mat-icon mat-list-icon>add_circle_outline</mat-icon>
+        <h4 mat-line>{{toDo.name}}</h4>
+      </mat-list-item>
+    </mat-list>
+  </div>
+
+  <div class="right-div">
+    <mat-list>
+      <h3 mat-subheader>Completed</h3>
+      <mat-list-item *ngFor="let completed of complete">
+        <mat-icon mat-list-icon>done</mat-icon>
+        <h4 mat-line>{{completed.name}}</h4>
+      </mat-list-item>
+    </mat-list>
+  </div>
+
+</div>

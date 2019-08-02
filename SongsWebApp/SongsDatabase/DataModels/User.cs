@@ -1,9 +1,12 @@
-﻿namespace SongsDatabase.Users
+﻿namespace SongsDatabase.DataModels
 {
+    using System;
+
     using MongoDB.Bson.Serialization.Attributes;
 
     using Base;
     using Security;
+
 
     [BsonIgnoreExtraElements]
     public class User : BaseEntity
@@ -33,6 +36,12 @@
         /// </summary>
         [BsonElement("description")]
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the date added.
+        /// </summary>
+        [BsonElement("date_added")]
+        public DateTime DateAdded { get; set; }
 
         #endregion
 
@@ -73,6 +82,8 @@
             Name = name;
             Description = description;
             Email = email;
+            DateAdded = DateTime.Now;
+
             byte[] salt = null;
             PasswordHash = SimpleHash.ComputeHash(password, HashAlgorithm, ref salt);
         }
@@ -83,6 +94,7 @@
             Description = string.Empty;
             Email = string.Empty;
             PasswordHash = string.Empty;
+            DateAdded = DateTime.Now;
         }
 
         #endregion

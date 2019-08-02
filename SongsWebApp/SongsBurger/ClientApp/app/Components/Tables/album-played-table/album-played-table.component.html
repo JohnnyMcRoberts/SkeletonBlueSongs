@@ -1,0 +1,18 @@
+﻿<div style="border: 1px solid red">AlbumPlayedTable Component</div>
+
+<div>
+
+  <table class="borders-table" *ngIf="albumsPlayed">
+    <tr>
+      <th> location </th>
+      <th> artist </th>
+      <th> album </th>
+    </tr>
+    <tr *ngFor="let detail of albumsPlayed" class="borders-tr">
+      <td class="headers-borders-title-td"><b> {{detail.location}} </b></td>
+      <td class="headers-borders-title-td"><b> {{detail.artist}} </b></td>
+      <td class="headers-borders-title-td"><b> {{detail.album}} </b></td>
+    </tr>
+  </table>
+
+</div>
