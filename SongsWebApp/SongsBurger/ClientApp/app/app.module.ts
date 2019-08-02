@@ -6,7 +6,8 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import {
+import
+{
     MatAutocompleteModule,
     MatBadgeModule,
     MatBottomSheetModule,
@@ -53,6 +54,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { ToDoListComponent } from './Components/to-do-list/to-do-list.component';
+import { TextFileImportExportComponent } from './Components/text-file-import-export/text-file-import-export.component';
 import { LoginComponent } from './Components/login/login.component';
 import { MainTablesComponent } from './Components/Tables/main-tables/main-tables.component';
 
@@ -65,16 +67,17 @@ import { NavigationHeaderComponent } from './Layout/navigation-header/navigation
 @NgModule({
     declarations:
     [
-      AppComponent,
+        AppComponent,
 
-      ToDoListComponent,
-      LoginComponent,
+        ToDoListComponent,
+        LoginComponent,
+        TextFileImportExportComponent,
 
-      MainTablesComponent,
+        MainTablesComponent,
 
-      LayoutComponent,
-      SideNavigationListComponent,
-      NavigationHeaderComponent
+        LayoutComponent,
+        SideNavigationListComponent,
+        NavigationHeaderComponent
     ],
     imports:
     [
