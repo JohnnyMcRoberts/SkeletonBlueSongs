@@ -1,1 +1,66 @@
-﻿<div style="border: 1px solid red">Login Component</div>
+﻿<mat-tab-group dynamicHeight #tabGroup>
+
+  <mat-tab label="Existing User Login">
+
+  </mat-tab>
+
+  <mat-tab label="New User Login">
+    
+    
+    <form [formGroup]="newUserFormGroup" #formDir="ngForm" class="example-form">
+                 
+      <table class="section-values-table" style="margin: 30px;">
+
+        <tr>
+          <td>
+
+            <mat-form-field class="example-full-width">
+              <input matInput type="text" 
+                     placeholder="New User Name" 
+                     formControlName="newUserName" 
+                     (input)="onNewUserNameInput()">
+              <mat-error *ngIf="newUserName.hasError('required')">User Name is required</mat-error>
+              <mat-error *ngIf="newUserName.hasError('minlength')">User Name must have at least {{minNameLength}} characters</mat-error>
+            </mat-form-field>
+
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+
+            <mat-form-field class="example-full-width">
+              <input matInput type="password" placeholder="Password" formControlName="password" (input)="onPasswordInput()">
+              <mat-error *ngIf="password.hasError('required')">Password is required</mat-error>
+              <mat-error *ngIf="password.hasError('minlength')">Password must have at least {{minPw}} characters</mat-error>
+            </mat-form-field>
+
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+
+            <mat-form-field class="example-full-width">
+              <input matInput type="password" placeholder="Confirm password" formControlName="password2" (input)="onPasswordInput()">
+              <mat-error *ngIf="password2.hasError('required')">Please confirm your password</mat-error>
+              <mat-error *ngIf="password2.invalid && !password2.hasError('required')">Passwords don't match</mat-error>
+            </mat-form-field>
+
+          </td>
+        </tr>
+        
+        <tr>
+          <td>
+            <button type="submit" class="btn btn-default"  (click)="onNewUserSubmitted()"
+                    [disabled]="newUserFormGroup.invalid">Submit</button>
+          </td>
+        </tr>
+
+      </table>
+    </form>
+
+
+  </mat-tab>
+
+</mat-tab-group>
