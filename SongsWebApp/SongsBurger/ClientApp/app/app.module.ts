@@ -67,6 +67,7 @@ import { SideNavigationListComponent } from './Layout/side-navigation-list/side-
 import { NavigationHeaderComponent } from './Layout/navigation-header/navigation-header.component';
 
 import { DataModelService } from './Services/data-model.service';
+import { AddUserLoginService } from './Services/add-user-login.service';
 
 @NgModule({
     declarations:
@@ -135,7 +136,11 @@ import { DataModelService } from './Services/data-model.service';
 
         AppRoutingModule
   ],
-  providers: [DataModelService],
+    providers:
+        [
+            DataModelService,
+            AddUserLoginService
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
