@@ -139,8 +139,6 @@ export class LoginComponent implements OnInit
             {
                 this.addUserLoginSuccessString = "Added New User Id: " + addResponse.userId;
                 this.addUserLoginErrorString = '';
-                this.newUserFormGroup.reset();
-                this.newUserFormGroup.clearValidators();
 
                 var userLogin: UserLogin =
                     new UserLogin(
@@ -150,6 +148,15 @@ export class LoginComponent implements OnInit
                         addResponse.userId);
 
                 this.currentLoginService.login(userLogin);
+
+                this.newUserFormGroup.reset();
+                this.newUserFormGroup.clearValidators();
+                this.newUserFormGroup.markAsPristine();
+                this.clearFormGroupControl(this.newUserFormGroup, 'newUserName');
+                this.clearFormGroupControl(this.newUserFormGroup, 'newUserEmail');
+                this.clearFormGroupControl(this.newUserFormGroup, 'newUserDescription');
+                this.clearFormGroupControl(this.newUserFormGroup, 'password');
+                this.clearFormGroupControl(this.newUserFormGroup, 'password2');
             }
             else
             {
@@ -185,8 +192,6 @@ export class LoginComponent implements OnInit
     public async onExistingUserSubmitted()
     {
         console.log('onExistingUserSubmitted -> Name : ', this.existingUserFormGroup.value.existingUserName);
-        console.log('onExistingUserSubmitted -> Password : ', this.existingUserFormGroup.value.existingUserPassword);
-
 
         var userLoginReq: UserLoginRequest =
             new UserLoginRequest(this.existingUserFormGroup.value.existingUserName, this.existingUserFormGroup.value.existingUserPassword);
@@ -219,17 +224,12 @@ export class LoginComponent implements OnInit
                         loginResponse.userId);
 
                 this.currentLoginService.login(userLogin);
+
                 this.existingUserFormGroup.reset();
                 this.existingUserFormGroup.clearValidators();
                 this.existingUserFormGroup.markAsPristine();
                 this.clearFormGroupControl(this.existingUserFormGroup, 'existingUserName');
                 this.clearFormGroupControl(this.existingUserFormGroup, 'existingUserPassword');
-                //this.existingUserFormGroup.get('existingUserName').reset();
-                //this.existingUserFormGroup.get('existingUserName').markAsPristine();
-                //this.existingUserFormGroup.get('existingUserName').clearValidators();
-                //this.existingUserFormGroup.get('existingUserPassword').reset();
-                //this.existingUserFormGroup.get('existingUserPassword').markAsPristine();
-                //this.existingUserFormGroup.get('existingUserPassword').clearValidators();
             }
             else
             {
@@ -237,7 +237,6 @@ export class LoginComponent implements OnInit
                 this.existingUserLoginErrorString = loginResponse.failReason;
             }
         }
-
     }
 
     //#endregion
