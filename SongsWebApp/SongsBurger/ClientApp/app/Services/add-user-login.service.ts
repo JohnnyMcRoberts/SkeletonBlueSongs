@@ -1,7 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { UserAddRequest, IUserAddRequest, UserAddResponse, IUserAddResponse } from './../Models/User';
+import { UserAddRequest, UserAddResponse } from './../Models/User';
 
 const httpOptions =
 {

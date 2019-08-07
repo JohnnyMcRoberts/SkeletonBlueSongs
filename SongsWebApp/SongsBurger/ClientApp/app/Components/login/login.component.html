@@ -2,18 +2,70 @@
 
   <mat-tab label="Existing User Login">
 
+    <div *ngIf="existingUserLoginSuccessString != ''">
+      <p>{{existingUserLoginSuccessString}}</p>
+    </div>
+
+    <div *ngIf="existingUserLoginErrorString != ''">
+      <p>Error in User Login {{existingUserLoginErrorString}}</p>
+    </div>
+
+
+    <form [formGroup]="existingUserFormGroup" #formDir="ngForm" class="example-form">
+
+      <table class="section-values-table" style="margin: 30px;">
+
+        <tr>
+          <td>
+
+            <mat-form-field class="example-full-width">
+              <input matInput type="text"
+                     placeholder="User Name"
+                     formControlName="existingUserName"
+                     (input)="onExistingUserNameInput()">
+              <mat-error *ngIf="existingUserName.hasError('required')">User Name is required</mat-error>
+            </mat-form-field>
+
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+
+            <mat-form-field class="example-full-width">
+              <input matInput type="password"
+                     placeholder="Password"
+                     formControlName="existingUserPassword"
+                     (input)="onExistingPasswordInput()">
+              <mat-error *ngIf="existingUserPassword.hasError('required')">Password is required</mat-error>
+            </mat-form-field>
+
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <button type="submit" class="btn btn-default" (click)="onExistingUserSubmitted()"
+                    [disabled]="existingUserFormGroup.invalid">
+              Submit
+            </button>
+          </td>
+        </tr>
+
+      </table>
+    </form>
+
   </mat-tab>
 
   <mat-tab label="New User Login">
 
-    <div *ngIf="successString != ''">
-      <p>{{successString}}</p>
+    <div *ngIf="addUserLoginSuccessString != ''">
+      <p>{{addUserLoginSuccessString}}</p>
     </div>
 
-    <div *ngIf="errorString != ''">
-      <p>Error adding new User Login {{errorString}}</p>
+    <div *ngIf="addUserLoginErrorString != ''">
+      <p>Error adding new User Login {{addUserLoginErrorString}}</p>
     </div>
-
 
     <form [formGroup]="newUserFormGroup" #formDir="ngForm" class="example-form">
 
@@ -38,9 +90,9 @@
           <td>
 
             <mat-form-field class="example-full-width">
-              <input matInput type="password" placeholder="Password" formControlName="password" (input)="onPasswordInput()">
+              <input matInput type="password" placeholder="Password" formControlName="password" (input)="onNewPasswordInput()">
               <mat-error *ngIf="password.hasError('required')">Password is required</mat-error>
-              <mat-error *ngIf="password.hasError('minlength')">Password must have at least {{minPw}} characters</mat-error>
+              <mat-error *ngIf="password.hasError('minlength')">Password must have at least {{minPasswordLength}} characters</mat-error>
             </mat-form-field>
 
           </td>
@@ -50,7 +102,7 @@
           <td>
 
             <mat-form-field class="example-full-width">
-              <input matInput type="password" placeholder="Confirm password" formControlName="password2" (input)="onPasswordInput()">
+              <input matInput type="password" placeholder="Confirm password" formControlName="password2" (input)="onNewPasswordInput()">
               <mat-error *ngIf="password2.hasError('required')">Please confirm your password</mat-error>
               <mat-error *ngIf="password2.invalid && !password2.hasError('required')">Passwords don't match</mat-error>
             </mat-form-field>
