@@ -8,8 +8,8 @@
     <h1>{{selectedMenuOption}}</h1>
   </div>
   <span class="example-spacer"></span>
-  <div>
-    <p>Login:{{currentLoginService.name}}</p>
+  <div *ngIf="currentLoginService.isLoggedIn">
+    <h1>User: {{currentLoginService.name}}</h1>
   </div>
   <div>
     <img src="https://upload.wikimedia.org/wikipedia/en/f/f6/Dragnet_%28The_Fall_album_-_cover_art%29.jpg" height="50" class="float-right">

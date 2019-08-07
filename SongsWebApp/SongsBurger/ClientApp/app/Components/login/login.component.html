@@ -4,57 +4,60 @@
 
     <div *ngIf="existingUserLoginSuccessString != ''">
       <p>{{existingUserLoginSuccessString}}</p>
+      <button class="btn btn-default" (click)="onExistingUserReset()">
+        Reset
+      </button>
     </div>
 
-    <div *ngIf="existingUserLoginErrorString != ''">
-      <p>Error in User Login {{existingUserLoginErrorString}}</p>
+    <div *ngIf="existingUserLoginSuccessString === ''">
+      <div *ngIf="existingUserLoginErrorString != ''">
+        <p>Error in User Login {{existingUserLoginErrorString}}</p>
+      </div>
+
+      <form [formGroup]="existingUserFormGroup" #formDir="ngForm" class="example-form">
+
+        <table class="section-values-table" style="margin: 30px;">
+
+          <tr>
+            <td>
+
+              <mat-form-field class="example-full-width">
+                <input matInput type="text"
+                       placeholder="User Name"
+                       formControlName="existingUserName"
+                       (input)="onExistingUserNameInput()">
+                <mat-error *ngIf="existingUserName.hasError('required')">User Name is required</mat-error>
+              </mat-form-field>
+
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+
+              <mat-form-field class="example-full-width">
+                <input matInput type="password"
+                       placeholder="Password"
+                       formControlName="existingUserPassword"
+                       (input)="onExistingPasswordInput()">
+                <mat-error *ngIf="existingUserPassword.hasError('required')">Password is required</mat-error>
+              </mat-form-field>
+
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <button type="submit" class="btn btn-default" (click)="onExistingUserSubmitted()"
+                      [disabled]="existingUserFormGroup.invalid">
+                Submit
+              </button>
+            </td>
+          </tr>
+
+        </table>
+      </form>
     </div>
-
-
-    <form [formGroup]="existingUserFormGroup" #formDir="ngForm" class="example-form">
-
-      <table class="section-values-table" style="margin: 30px;">
-
-        <tr>
-          <td>
-
-            <mat-form-field class="example-full-width">
-              <input matInput type="text"
-                     placeholder="User Name"
-                     formControlName="existingUserName"
-                     (input)="onExistingUserNameInput()">
-              <mat-error *ngIf="existingUserName.hasError('required')">User Name is required</mat-error>
-            </mat-form-field>
-
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-
-            <mat-form-field class="example-full-width">
-              <input matInput type="password"
-                     placeholder="Password"
-                     formControlName="existingUserPassword"
-                     (input)="onExistingPasswordInput()">
-              <mat-error *ngIf="existingUserPassword.hasError('required')">Password is required</mat-error>
-            </mat-form-field>
-
-          </td>
-        </tr>
-
-        <tr>
-          <td>
-            <button type="submit" class="btn btn-default" (click)="onExistingUserSubmitted()"
-                    [disabled]="existingUserFormGroup.invalid">
-              Submit
-            </button>
-          </td>
-        </tr>
-
-      </table>
-    </form>
-
   </mat-tab>
 
   <mat-tab label="New User Login">

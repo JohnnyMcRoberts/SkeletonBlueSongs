@@ -1,6 +1,8 @@
 //#region Import Components
 
 import { AppComponent } from './app.component';
+import { FileSelectDirective } from 'ng2-file-upload';
+
 import { ToDoListComponent } from './Components/to-do-list/to-do-list.component';
 import { TextFileImportExportComponent } from './Components/text-file-import-export/text-file-import-export.component';
 import { LoginComponent } from './Components/login/login.component';
@@ -20,6 +22,8 @@ import { DataModelService } from './Services/data-model.service';
 import { AddUserLoginService } from './Services/add-user-login.service';
 import { CurrentLoginService } from './Services/current-login.service';
 import { LoginService } from './Services/login.service';
+import { FileUploadService } from './Services/file-upload.service';
+import { SongsFilesDetailsService } from './Services/songs-files-details.service';
 
 //#endregion
 
@@ -84,6 +88,7 @@ import {
     declarations:
     [
         AppComponent,
+        FileSelectDirective,
 
         ToDoListComponent,
         LoginComponent,
@@ -152,7 +157,9 @@ import {
         DataModelService,
         AddUserLoginService,
         LoginService,
-        CurrentLoginService
+        CurrentLoginService,
+            FileUploadService,
+        SongsFilesDetailsService
     ],
     bootstrap: [AppComponent]
 })

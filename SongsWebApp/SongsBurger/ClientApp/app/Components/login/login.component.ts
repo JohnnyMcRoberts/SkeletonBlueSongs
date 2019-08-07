@@ -1,7 +1,6 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ValidatorFn, ValidationErrors } from '@angular/forms';
 
-
 import { UserAddRequest, UserAddResponse, UserLoginRequest, UserLoginResponse, UserLogin } from './../../Models/User';
 
 import { AddUserLoginService } from './../../Services/add-user-login.service';
@@ -16,7 +15,6 @@ import { LoginService } from './../../Services/login.service';
 /** Login component*/
 export class LoginComponent implements OnInit
 {
-
     /** Login ctor */
     constructor(
         private formBuilder: FormBuilder,
@@ -239,8 +237,12 @@ export class LoginComponent implements OnInit
         }
     }
 
-    //#endregion
+    public onExistingUserReset()
+    {
+        this.existingUserLoginSuccessString = '';
+    }
 
+    //#endregion
 
 }
 
