@@ -1,10 +1,12 @@
 ﻿namespace SongsBurger.Controllers.RequestsResponses
 {
-    public enum UserAddResponseCode
+    public enum UserResponseCode
     {
         Success = 0,
         DuplicateName,
-        DuplicateEmail
+        DuplicateEmail,
+        UnknownUser,
+        IncorrectPassword
     };
 
     public class UserAddResponse

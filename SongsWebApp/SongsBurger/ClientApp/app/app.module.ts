@@ -1,13 +1,47 @@
+//#region Import Components
+
+import { AppComponent } from './app.component';
+import { FileSelectDirective } from 'ng2-file-upload';
+
+import { ToDoListComponent } from './Components/to-do-list/to-do-list.component';
+import { TextFileImportExportComponent } from './Components/text-file-import-export/text-file-import-export.component';
+import { LoginComponent } from './Components/login/login.component';
+
+import { MainTablesComponent } from './Components/Tables/main-tables/main-tables.component';
+import { AlbumPlayedTableComponent } from './Components/Tables/album-played-table/album-played-table.component';
+
+import { LayoutComponent } from './Layout/layout/layout.component';
+import { SideNavigationListComponent } from './Layout/side-navigation-list/side-navigation-list.component';
+import { NavigationHeaderComponent } from './Layout/navigation-header/navigation-header.component';
+
+//#endregion
+
+//#region Import Services
+
+import { DataModelService } from './Services/data-model.service';
+import { AddUserLoginService } from './Services/add-user-login.service';
+import { CurrentLoginService } from './Services/current-login.service';
+import { LoginService } from './Services/login.service';
+import { FileUploadService } from './Services/file-upload.service';
+import { SongsFilesDetailsService } from './Services/songs-files-details.service';
+
+//#endregion
+
+//#region Import Modules
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { AppComponent } from './app.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CdkTableModule } from '@angular/cdk/table';
 
-import
-{
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LayoutModule } from '@angular/cdk/layout';
+
+import { AppRoutingModule } from './app-routing.module';
+
+import {
     MatAutocompleteModule,
     MatBadgeModule,
     MatBottomSheetModule,
@@ -48,31 +82,13 @@ import
 
 } from '@angular/material';
 
-import { CdkTableModule } from '@angular/cdk/table';
-
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LayoutModule } from '@angular/cdk/layout';
-
-import { ToDoListComponent } from './Components/to-do-list/to-do-list.component';
-import { TextFileImportExportComponent } from './Components/text-file-import-export/text-file-import-export.component';
-import { LoginComponent } from './Components/login/login.component';
-
-import { MainTablesComponent } from './Components/Tables/main-tables/main-tables.component';
-import { AlbumPlayedTableComponent } from './Components/Tables/album-played-table/album-played-table.component';
-
-import { AppRoutingModule } from './app-routing.module';
-
-import { LayoutComponent } from './Layout/layout/layout.component';
-import { SideNavigationListComponent } from './Layout/side-navigation-list/side-navigation-list.component';
-import { NavigationHeaderComponent } from './Layout/navigation-header/navigation-header.component';
-
-import { DataModelService } from './Services/data-model.service';
-import { AddUserLoginService } from './Services/add-user-login.service';
+//#endregion
 
 @NgModule({
     declarations:
     [
         AppComponent,
+        FileSelectDirective,
 
         ToDoListComponent,
         LoginComponent,
@@ -135,12 +151,16 @@ import { AddUserLoginService } from './Services/add-user-login.service';
         CdkTableModule,
 
         AppRoutingModule
-  ],
-    providers:
-        [
-            DataModelService,
-            AddUserLoginService
     ],
-  bootstrap: [AppComponent]
+    providers:
+    [
+        DataModelService,
+        AddUserLoginService,
+        LoginService,
+        CurrentLoginService,
+            FileUploadService,
+        SongsFilesDetailsService
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

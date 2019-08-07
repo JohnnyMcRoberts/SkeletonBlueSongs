@@ -1,1 +1,54 @@
-﻿<div style="border: 1px solid red">TextFileImportExport Component</div>
+﻿<div *ngIf="!currentLoginService.isLoggedIn" class="not-logged-in-div">
+  <h1>Not currently Logged In</h1>
+</div>
+<div *ngIf="currentLoginService.isLoggedIn">
+  <mat-tab-group dynamicHeight #tabGroup>
+
+    <mat-tab label="File Import">
+
+      <div class="logged-in-div">
+        <div>
+          <p>Select Albums File:</p>
+          <input type="file" #fileInput ng2FileSelect [uploader]="uploader" (change)="uploadFile()"/>
+
+
+          <button mat-raised-button color="primary" (click)="onFileSelected(item)">
+            Upload
+          </button>
+
+        </div>
+
+        <div>
+          <h3 mat-subheader>Selected Files</h3>
+          <mat-list>
+            <mat-list-item *ngFor="let item of uploader.queue">
+              <mat-icon mat-list-icon>folder</mat-icon>
+              <h4 mat-line>{{ item?.file?.name }}</h4>
+              <p mat-line> {{ item?.file?.size/1024/1024 | number:'.2' }} MB </p>
+              <p mat-line>
+                <button mat-raised-button color="warn" (click)="item.remove()">
+                  Remove
+                </button>
+                <button mat-raised-button color="primary" (click)="onFileSelected(item)">
+                  Submit
+                </button>
+                <button mat-stroked-button [disabled]="!visibilityHash[item._file.name]" color="primary" (click)="onGetDetails(item)">
+                  Details
+                </button>
+              </p>
+            </mat-list-item>
+          </mat-list>
+
+        </div>
+
+      </div>
+    </mat-tab>
+
+    <mat-tab label="File Export">
+
+      <app-album-played-table></app-album-played-table>
+
+    </mat-tab>
+
+  </mat-tab-group>
+</div>

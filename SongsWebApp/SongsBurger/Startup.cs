@@ -28,6 +28,7 @@ namespace SongsBurger
 
             // Add our Config so the objects can be injected
             services.Configure<MongoDbSettings>(Configuration.GetSection("MongoDbSettings"));
+            services.Configure<FileUploadSettings>(Configuration.GetSection("FileUploadSettings"));
 
             services.AddSwaggerGen(c =>
             {
