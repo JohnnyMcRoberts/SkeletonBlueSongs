@@ -6,7 +6,9 @@ export interface IAlbumPlayed extends IDbElement
     location: string;
     artist: string;
     album: string;
-    user_name: string;
+    userName: string;
+    imagePath: string;
+    playerLink: string;
 };
 
 
@@ -18,7 +20,9 @@ export class AlbumPlayed implements IAlbumPlayed
         public location: string = "",
         public artist: string = "",
         public album: string = "",
-        public user_name: string = "")
+        public userName: string = "",
+        public imagePath: string = "",
+        public playerLink: string = "")
     {
     }
 };
