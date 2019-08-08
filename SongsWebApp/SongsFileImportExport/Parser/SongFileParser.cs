@@ -21,12 +21,12 @@ namespace SongsFileImportExport.Parser
         #region Constants
 
         public const int NumberWordsInDate = 4;
+
         public static readonly string[] DayStrings = 
             {"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"};
 
         public static readonly string[] OrdinalStrings =
             {"st", "nd", "rd", "th"};
-
 
         public static readonly char[] IgnoreChars = {' ', '\t'};
 
@@ -109,7 +109,10 @@ namespace SongsFileImportExport.Parser
             }
         }
 
-        private static void ParseLineWhenOnLocation(string line, ref FileReadState state, ref AlbumPlayed currentAlbumPlayed)
+        private static void ParseLineWhenOnLocation(
+            string line, 
+            ref FileReadState state, 
+            ref AlbumPlayed currentAlbumPlayed)
         {
             if (line[0] == '\t' && line[1] == '\t')
             {
@@ -119,7 +122,10 @@ namespace SongsFileImportExport.Parser
             }
         }
 
-        private static void ParseLineWhenOnDate(string line, ref FileReadState state, ref AlbumPlayed currentAlbumPlayed)
+        private static void ParseLineWhenOnDate(
+            string line, 
+            ref FileReadState state, 
+            ref AlbumPlayed currentAlbumPlayed)
         {
             if (line[0] == '\t')
             {
@@ -129,7 +135,10 @@ namespace SongsFileImportExport.Parser
             }
         }
 
-        private static void ParseLineWhenReset(string line, ref FileReadState state, ref AlbumPlayed currentAlbumPlayed)
+        private static void ParseLineWhenReset(
+            string line, 
+            ref FileReadState state, 
+            ref AlbumPlayed currentAlbumPlayed)
         {
             if (char.IsLetterOrDigit(line[0]))
             {
@@ -146,7 +155,9 @@ namespace SongsFileImportExport.Parser
             }
         }
 
-        private static bool ParseDateFromString(string[] words, ref DateTime date)
+        private static bool ParseDateFromString(
+            string[] words, 
+            ref DateTime date)
         {
             // example text would be "Monday 26th February 2018"
             if (DayStrings.Contains(words[0].ToLower()))
@@ -180,7 +191,9 @@ namespace SongsFileImportExport.Parser
             return false;
         }
 
-        private static bool EndsWithOrdinal(string dayOfMonth, ref int day)
+        private static bool EndsWithOrdinal(
+            string dayOfMonth, 
+            ref int day)
         {
             bool endsOk = false;
             foreach (var ordinal in OrdinalStrings)
@@ -214,12 +227,12 @@ namespace SongsFileImportExport.Parser
             if (!File.Exists(filePath))
                 return albums;
 
-            // read the file line by line
+            // default the parsing state data
             string line;
             FileReadState parseState = FileReadState.Reset;
             AlbumPlayed currentAlbumPlayed  = new AlbumPlayed();
 
-            // Read the file and display it line by line.  
+            // Read the file and parse it line by line.  
             StreamReader file = new StreamReader(filePath);
             while ((line = file.ReadLine()) != null)
             {

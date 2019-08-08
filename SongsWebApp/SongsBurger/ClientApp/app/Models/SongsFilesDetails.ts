@@ -1,5 +1,4 @@
-﻿import { IDbElement } from './IDbElement';
-import { IAlbumPlayed, AlbumPlayed } from './AlbumPlayed';
+﻿import { IAlbumPlayed, AlbumPlayed } from './AlbumPlayed';
 
 export interface ISongsFilesDetailsRequest
 {

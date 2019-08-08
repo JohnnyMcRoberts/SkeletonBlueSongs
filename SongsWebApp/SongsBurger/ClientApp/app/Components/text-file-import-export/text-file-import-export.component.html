@@ -7,12 +7,13 @@
     <mat-tab label="File Import">
 
       <div class="logged-in-div">
+
         <div>
           <p>Select Albums File:</p>
-          <input type="file" #fileInput ng2FileSelect [uploader]="uploader" (change)="uploadFile()"/>
+          <input type="file" #fileInput ng2FileSelect [uploader]="uploader" (change)="uploadFile()" />
 
 
-          <button mat-raised-button color="primary" (click)="onFileSelected(item)">
+          <button mat-raised-button color="primary" (click)="onFileSubmitted(item)">
             Upload
           </button>
 
@@ -29,7 +30,7 @@
                 <button mat-raised-button color="warn" (click)="item.remove()">
                   Remove
                 </button>
-                <button mat-raised-button color="primary" (click)="onFileSelected(item)">
+                <button mat-raised-button color="primary" (click)="onFileSubmitted(item)">
                   Submit
                 </button>
                 <button mat-stroked-button [disabled]="!visibilityHash[item._file.name]" color="primary" (click)="onGetDetails(item)">
@@ -38,6 +39,40 @@
               </p>
             </mat-list-item>
           </mat-list>
+
+        </div>
+
+        <div *ngIf="songsFilesDetailsResponse">
+
+          <h1> PARSED FILE!!!!!!!!</h1>
+
+          <div *ngIf="songsFilesDetailsResponse.errorCode != 0">
+
+            <p>Error in file upload: {{songsFilesDetailsResponse.failReason}}</p>
+
+          </div>
+          
+          <div>
+
+            <p>Starts</p>
+
+            <table class="borders-table" *ngIf="songsFilesDetailsResponse.albumsPlayed">
+              <tr>
+                <th> location </th>
+                <th> artist </th>
+                <th> album </th>
+              </tr>
+              <tr *ngFor="let detail of songsFilesDetailsResponse.albumsPlayed" class="borders-tr">
+                <td class="headers-borders-title-td"><b> {{detail.date  | date :'fullDate' }} </b></td>
+                <td class="headers-borders-title-td"><b> {{detail.location}} </b></td>
+                <td class="headers-borders-title-td"><b> {{detail.artist}} </b></td>
+                <td class="headers-borders-title-td"><b> {{detail.album}} </b></td>
+              </tr>
+            </table>
+
+            <p>Ends</p>
+
+          </div>
 
         </div>
 

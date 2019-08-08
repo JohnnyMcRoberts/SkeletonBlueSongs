@@ -1,12 +1,14 @@
 ﻿namespace SongsBurger.Controllers
 {
     using System.IO;
-    using System.Net.Http.Headers;
 
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
 
     using Settings;
+    using Utilities;
+
+
 
     [Route("api/[controller]")]
     [ApiController]
@@ -27,9 +29,11 @@
                 {
                     Directory.CreateDirectory(newPath);
                 }
+
                 if (file.Length > 0)
                 {
-                    string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    //string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    string fileName = FileUtilities.SongDetailsFileName;
                     string fullPath = Path.Combine(newPath, fileName);
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
@@ -49,7 +53,6 @@
         {
             // Get the settings.
             _uploaderSettings = uploaderConfig.Value;
-
         }
     }
 }

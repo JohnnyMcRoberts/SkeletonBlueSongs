@@ -1,21 +1,21 @@
-﻿
-
-using System;
-using System.Collections.ObjectModel;
-using SongsDatabase.DataModels;
-
-namespace SongsBurger.Controllers
+﻿namespace SongsBurger.Controllers
 {
+    using System;
+    using System.Collections.ObjectModel;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
 
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
 
-    using SongsBurger.Controllers.Settings;
     using SongsDatabase.Databases;
+    using SongsDatabase.DataModels;
 
+    using SongsFileImportExport.Parser;
+
+    using RequestsResponses;
+    using Settings;
+    using Utilities;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -24,7 +24,7 @@ namespace SongsBurger.Controllers
         #region Private Data
 
         private readonly MongoDbSettings _dbConfig;
-        private readonly UserDatabase _userDatabase;
+        private readonly FileUploadSettings _uploaderSettings;
         private readonly AlbumPlayedDatabase _albumPlayedDatabase;
 
         #endregion
@@ -34,6 +34,8 @@ namespace SongsBurger.Controllers
         private static readonly object Lock = new object();
 
         #endregion
+
+        #region HTTP Requests
 
         [HttpGet("[action]")]
         public IEnumerable<AlbumPlayed> GetAllAlbumsPlayed()
@@ -60,12 +62,54 @@ namespace SongsBurger.Controllers
             return albums;
         }
 
+        [HttpGet("[action]/{key}")]
+        [ProducesResponseType(201, Type = typeof(SongsFilesDetailsResponse))]
+        [ProducesResponseType(400)]
+        public SongsFilesDetailsResponse GetAllAlbumsPlayedFromFile(string key)
+        {
+            SongsFilesDetailsResponse resp = new SongsFilesDetailsResponse
+            {
+                FileName = key,
+                ErrorCode = (int)SongsFilesResponseCode.Success
+            };
+
+            string fullPath = 
+                FileUtilities.GetFullSongsDetailsFilePath(key, _uploaderSettings.UploadFilesDirectory);
+
+            if (System.IO.File.Exists(fullPath))
+            {
+                var albums = SongFileParser.GetAlbumsPlayedFromFile(fullPath);
+
+                if (albums == null || !albums.Any())
+                {
+                    resp.ErrorCode = (int)SongsFilesResponseCode.NoSongsInFile;
+                    resp.FailReason = "No songs in file.";
+                }
+                else
+                {
+                    resp.AlbumsPlayed = albums.ToArray();
+                }
+            }
+            else
+            {
+                resp.ErrorCode = (int)SongsFilesResponseCode.InvalidFile;
+                resp.FailReason = "No such file exists.";
+            }
+
+            return resp;
+        }
+
+        #endregion
+
         #region Constructor
 
-        public DataModelController(IOptions<MongoDbSettings> dbConfig)
+        public DataModelController(
+            IOptions<FileUploadSettings> uploaderConfig,
+            IOptions<MongoDbSettings> dbConfig)
         {
             _dbConfig = dbConfig.Value;
-            _userDatabase = new UserDatabase(_dbConfig.ConnectionString);
+            _uploaderSettings = uploaderConfig.Value;
+
             _albumPlayedDatabase = new AlbumPlayedDatabase(_dbConfig.ConnectionString);
         }
 

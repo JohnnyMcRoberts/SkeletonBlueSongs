@@ -6,6 +6,7 @@ import { SongsFilesDetailsRequest, SongsFilesDetailsResponse } from './../../Mod
 import { CurrentLoginService } from './../../Services/current-login.service';
 import { FileUploadService } from './../../Services/file-upload.service';
 import { SongsFilesDetailsService } from './../../Services/songs-files-details.service';
+import { DataModelService } from './../../Services/data-model.service';
 
 export interface IHash
 {
@@ -24,7 +25,8 @@ export class TextFileImportExportComponent
     constructor(
         private currentLoginService: CurrentLoginService,
         private fileUploadService: FileUploadService,
-        private songsFilesDetailsService: SongsFilesDetailsService
+        private songsFilesDetailsService: SongsFilesDetailsService,
+        private dataModelService: DataModelService
         )
     {
         this.uploader = new FileUploader({
@@ -52,7 +54,7 @@ export class TextFileImportExportComponent
     public visibilityHash: IHash = {};
     public isCheckThumbnail: IHash = {};
     public savedFilesHash: IHash = {};
-    public onFileSelected(fileInfo: any)
+    public onFileSubmitted(fileInfo: any)
     {
         const file: File = fileInfo._file;
         this.visibilityHash[file.name] = true;
@@ -60,12 +62,14 @@ export class TextFileImportExportComponent
         console.log(file.name);
 
         this.uploadFileName = file.name;
-        this.fileUploadService.upload(this.tmpFolder, [file]);
+        var fileNameGuid = this.getNewGuid();
+        this.fileUploadService.upload(fileNameGuid, [file]);
+        this.uploadFileNameByGuid.set(this.uploadFileName, fileNameGuid);
     }
 
+    public uploadFileNameByGuid: Map<string, string> = new  Map<string, string>();
 
     // File calculate details.
-    private temporaryPath: string = "temp";
     public songFileDetails: Array<any>;
 
     public async onGetDetails(fileInfo: any)
@@ -73,24 +77,52 @@ export class TextFileImportExportComponent
         const file: File = fileInfo._file;
 
         console.log(file.name);
-        var detailsRequest = new SongsFilesDetailsRequest();
-        detailsRequest.fileName = file.name;
-        detailsRequest.filePath = this.temporaryPath;
 
-        await this.songsFilesDetailsService.getAsyncSongsFilesDetailsData(detailsRequest);
+        if (this.uploadFileNameByGuid.has(file.name))
+        {
+            var fileNameGuid = this.uploadFileNameByGuid.get(file.name);
 
-        var tempDetails: any[] = Object.assign([], this.songFileDetails);
-        this.songFileDetails = null;
-        if (this.songsFilesDetailsService.songsFilesDetailsResponse == undefined)
+            this.dataModelService.fetchAllSongsFromFileData(fileNameGuid).then(() =>
+            {
+                this.updateSelectedSongDetails(this.dataModelService.albumsPlayedResponse);
+            });
+        }
+    }
+
+    public songsFilesDetailsResponse: SongsFilesDetailsResponse = null;
+    public songsFilesDetailsResponseRxed: boolean = false;
+    public updateSelectedSongDetails(songsFilesDetailsResponse: any)
+    {
+        this.songsFilesDetailsResponseRxed = true;
+        if (songsFilesDetailsResponse == undefined)
         {
             console.log("Error in response");
         }
         else
         {
-            tempDetails.push(this.songsFilesDetailsService.songsFilesDetailsResponse);
+            this.songsFilesDetailsResponse = SongsFilesDetailsResponse.fromData(songsFilesDetailsResponse);
             console.log("Response OK");
         }
+    }
 
-        this.songFileDetails = tempDetails;
+
+    public getNewGuid(): string
+    {
+        var result: string;
+        var i: string;
+        var j: number;
+
+        result = "";
+        for (j = 0; j < 32; j++)
+        {
+            if (j === 8 || j === 12 || j === 16 || j === 20)
+            {
+                 result = result + '-';
+            }
+
+            i = Math.floor(Math.random() * 16).toString(16).toUpperCase();
+            result = result + i;
+        }
+        return result;
     }
 }
