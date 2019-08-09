@@ -1,11 +1,15 @@
 ﻿import { Component, Inject, Output, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+
 import { FileUploader } from 'ng2-file-upload';
 
 import { SongsFilesDetailsRequest, SongsFilesDetailsResponse } from './../../Models/SongsFilesDetails';
+import { AlbumPlayed } from './../../Models/AlbumPlayed';
 
 import { CurrentLoginService } from './../../Services/current-login.service';
 import { FileUploadService } from './../../Services/file-upload.service';
 import { DataModelService } from './../../Services/data-model.service';
+
 
 export interface IHash
 {
@@ -110,6 +114,8 @@ export class TextFileImportExportComponent
 
             
             this.fileIsUploaded = true;
+
+            this.setupDataTable(songsFilesDetailsResponse.albumsPlayed);
         }
     }
 
@@ -176,4 +182,68 @@ export class TextFileImportExportComponent
     }
 
     //#endregion
+
+
+    //#region Data Table implementation
+
+    @ViewChild('itemsTablePaginator') public itemsTablePaginator: MatPaginator;
+    @ViewChild('itemsTableSort') public itemsTableSort: MatSort;
+
+    public setupDataTable(albumsData: AlbumPlayed[]): void
+    {
+        this.items = albumsData;
+        this.itemsDataSource = new MatTableDataSource(this.items);
+        this.setupItemsPagingAndSorting();
+    }
+
+
+    public items: any[];
+    public itemsDisplayedColumns: string[] = this.getItemsDisplayedColumns();
+    public itemsDataSource: MatTableDataSource<any>;
+
+    public getItemsDisplayedColumns(): string[]
+    {
+        var columns =
+        [
+            'date',
+            'location',
+            'artist',
+            'album'
+        ];
+
+        return columns;
+    }
+
+    public setupItemsPagingAndSorting(): void
+    {
+        if (this.items != null)
+        {
+            setTimeout(() =>
+            {
+                this.itemsDataSource.paginator = this.itemsTablePaginator;
+                this.itemsDataSource.sort = this.itemsTableSort;
+                this.itemsTableSort.sortChange.subscribe(() =>
+                {
+                    this.itemsTablePaginator.pageIndex = 0;
+                    this.itemsTablePaginator._changePageSize(this.itemsTablePaginator.pageSize);
+                });
+            });
+        }
+    }
+
+    public applyItemsFilter(filterValue: string)
+    {
+        this.itemsDataSource.filter = filterValue.trim().toLowerCase();
+
+        if (this.itemsDataSource.paginator)
+        {
+            this.itemsTablePaginator.pageIndex = 0;
+            this.itemsTablePaginator._changePageSize(this.itemsTablePaginator.pageSize);
+        }
+    }
+
+
+    //#endregion
+
+
 }
