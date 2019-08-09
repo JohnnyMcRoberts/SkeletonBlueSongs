@@ -5,7 +5,7 @@ import { DataModelService } from './../../Services/data-model.service';
 import { CurrentLoginService } from './../../Services/current-login.service';
 
 import { SongsValuesDetails } from './../../Models/SongsFilesDetails';
-import { AlbumPlayed } from './../../Models/AlbumPlayed';
+import { AlbumPlayed, AlbumPlayedAddResponse } from './../../Models/AlbumPlayed';
 import { AutocompleteCategoryFormField, CategoricalValuePair, ICategoricalValuePair } from './../../Models/AutocompleteCategoryFormField';
 
 
@@ -141,13 +141,30 @@ export class AddAlbumComponent implements OnInit, AfterViewInit
 
     //#region Page Control Handlers
 
-    public onAddNewAlbum(): void
+    public async onAddNewAlbum()
     {
-        //this.fileInput.nativeElement.value = '';
-        //this.songsFilesDetailsResponse = null;
-        //this.songsFilesDetailsResponseRxed = false;
-        //this.fileIsSelected = false;
-        //this.fileIsUploaded = false;
+
+        this.newAlbumPlayed = this.getNewAlbumPlayed();
+        console.log('onAddNewAlbum -> newUserName : ', this.newAlbumPlayed.artist);
+
+        //var addUserReq: UserAddRequest =
+        //    new UserAddRequest(this.newUserFormGroup.value.newUserName,
+        //        this.newUserFormGroup.value.password,
+        //        this.newUserFormGroup.value.newUserDescription,
+        //        this.newUserFormGroup.value.newUserEmail);
+
+        await this.dataModelService.addAsyncAlbumPlayed(this.newAlbumPlayed);
+
+        var resp = AlbumPlayedAddResponse.fromData(this.dataModelService.addUserLoginResponse);
+
+        if (resp == undefined)
+        {
+            console.log("Error in response");
+        }
+        else
+        {
+            console.log("Response OK");
+        }
     }
 
     public onNewAlbumReset(): void

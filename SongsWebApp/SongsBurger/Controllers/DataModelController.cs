@@ -198,6 +198,36 @@
             return details;
         }
 
+        /// <summary>
+        /// Adds a new user login.
+        /// </summary>
+        /// <param name="addAlbumRequest">The new album played item to try to add.</param>
+        /// <returns>The action result.</returns>
+        [HttpPost]
+        public IActionResult Post([FromBody] AlbumPlayed addAlbumRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            AlbumPlayedAddResponse response = new AlbumPlayedAddResponse
+            {
+                ErrorCode = (int)UserResponseCode.Success,
+                Album = addAlbumRequest,
+                FailReason = "",
+                UserId = ""
+            };
+
+            lock (Lock)
+            {
+                _albumPlayedDatabase.AddNewItemToDatabase(addAlbumRequest);
+            }
+
+            return Ok(response);
+        }
+
+
         #endregion
 
         #region Constructor
