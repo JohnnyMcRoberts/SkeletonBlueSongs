@@ -18,14 +18,11 @@ export class SongsFilesDetailsService
     }
 
     public requestUrl: string;
+
+
     public songsFilesDetailsResponse: any;
-
-    async getAsyncSongsFilesDetailsData(cadDetailsRequest: SongsFilesDetailsRequest)
-    {
-        this.songsFilesDetailsResponse =
-            await this.http.post<SongsFilesDetailsResponse>(
-                this.requestUrl, cadDetailsRequest, httpOptions).toPromise();
-
+    async getAsyncSongsFromFile(key: string) {
+        this.songsFilesDetailsResponse = await this.http.get(this.requestUrl + "GetAllAlbumsFromFile/" + key, httpOptions).toPromise();
         console.log('No issues, waiting until promise is resolved...');
     }
 }

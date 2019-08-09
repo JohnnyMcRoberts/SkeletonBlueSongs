@@ -1,11 +1,15 @@
 ﻿import { Component, Inject, Output, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+
 import { FileUploader } from 'ng2-file-upload';
 
 import { SongsFilesDetailsRequest, SongsFilesDetailsResponse } from './../../Models/SongsFilesDetails';
+import { AlbumPlayed } from './../../Models/AlbumPlayed';
 
 import { CurrentLoginService } from './../../Services/current-login.service';
 import { FileUploadService } from './../../Services/file-upload.service';
-import { SongsFilesDetailsService } from './../../Services/songs-files-details.service';
+import { DataModelService } from './../../Services/data-model.service';
+
 
 export interface IHash
 {
@@ -24,7 +28,7 @@ export class TextFileImportExportComponent
     constructor(
         private currentLoginService: CurrentLoginService,
         private fileUploadService: FileUploadService,
-        private songsFilesDetailsService: SongsFilesDetailsService
+        private dataModelService: DataModelService
         )
     {
         this.uploader = new FileUploader({
@@ -33,26 +37,33 @@ export class TextFileImportExportComponent
         });
 
     }
-
-    public tmpFolder: string = "temp";
-
+    
     @ViewChild('fileInput') fileInput: any;
+
+    //#region Local data
+
     public uploader: FileUploader;
 
-    public uploadFile()
-    {
-        //this.uploader.clearQueue();
-        this.uploader.uploadAll();
-        this.fileInput.nativeElement.value = '';
-    }
+    public fileInfoLatest: any;
 
-    // File upload
-    public uploadFileName: string;
+    public fileIsSelected: boolean = false;
+    public fileIsUploaded: boolean = false;
+    public songsFilesDetailsResponseRxed: boolean = false;
     public isSubmitted: boolean;
+
+    public uploadFileName: string;
     public visibilityHash: IHash = {};
-    public isCheckThumbnail: IHash = {};
     public savedFilesHash: IHash = {};
-    public onFileSelected(fileInfo: any)
+    public uploadFileNameByGuid: Map<string, string> = new Map<string, string>();
+
+    public songFileDetails: Array<any>;
+    public songsFilesDetailsResponse: SongsFilesDetailsResponse = null;
+
+    //#endregion
+
+    //#region File Upload helper methods
+
+    public getGuidForSubmittedFile(fileInfo: any): string
     {
         const file: File = fileInfo._file;
         this.visibilityHash[file.name] = true;
@@ -60,37 +71,195 @@ export class TextFileImportExportComponent
         console.log(file.name);
 
         this.uploadFileName = file.name;
-        this.fileUploadService.upload(this.tmpFolder, [file]);
+        var fileNameGuid: string = this.getNewGuid();
+        return fileNameGuid;
     }
 
-
-    // File calculate details.
-    private temporaryPath: string = "temp";
-    public songFileDetails: Array<any>;
+    public onFileSubmitted(fileInfo: any)
+    {
+        const file: File = fileInfo._file;
+        var fileNameGuid = this.getGuidForSubmittedFile(fileInfo);
+        this.fileUploadService.upload(fileNameGuid, [file]);
+        this.uploadFileNameByGuid.set(this.uploadFileName, fileNameGuid);
+    }
 
     public async onGetDetails(fileInfo: any)
     {
         const file: File = fileInfo._file;
 
         console.log(file.name);
-        var detailsRequest = new SongsFilesDetailsRequest();
-        detailsRequest.fileName = file.name;
-        detailsRequest.filePath = this.temporaryPath;
 
-        await this.songsFilesDetailsService.getAsyncSongsFilesDetailsData(detailsRequest);
+        if (this.uploadFileNameByGuid.has(file.name))
+        {
+            var fileNameGuid = this.uploadFileNameByGuid.get(file.name);
 
-        var tempDetails: any[] = Object.assign([], this.songFileDetails);
-        this.songFileDetails = null;
-        if (this.songsFilesDetailsService.songsFilesDetailsResponse == undefined)
+            this.dataModelService.fetchAllSongsFromFileData(fileNameGuid).then(() =>
+            {
+                this.updateSelectedSongDetails(this.dataModelService.albumsPlayedResponse);
+            });
+        }
+    }
+
+    public updateSelectedSongDetails(songsFilesDetailsResponse: any)
+    {
+        this.songsFilesDetailsResponseRxed = true;
+        if (songsFilesDetailsResponse == undefined)
         {
             console.log("Error in response");
         }
         else
         {
-            tempDetails.push(this.songsFilesDetailsService.songsFilesDetailsResponse);
+            this.songsFilesDetailsResponse = SongsFilesDetailsResponse.fromData(songsFilesDetailsResponse);
             console.log("Response OK");
-        }
 
-        this.songFileDetails = tempDetails;
+            
+            this.fileIsUploaded = true;
+
+            this.setupDataTable(songsFilesDetailsResponse.albumsPlayed);
+        }
     }
+
+    public getNewGuid(): string
+    {
+        var result: string;
+        var i: string;
+        var j: number;
+
+        result = "";
+        for (j = 0; j < 32; j++)
+        {
+            if (j === 8 || j === 12 || j === 16 || j === 20)
+            {
+                 result = result + '-';
+            }
+
+            i = Math.floor(Math.random() * 16).toString(16).toUpperCase();
+            result = result + i;
+        }
+        return result;
+    }
+
+    public async setFileSongsForUser(fileInfo: any, userId:string)
+    {
+        const file: File = fileInfo._file;
+
+        console.log(file.name);
+
+        if (this.uploadFileNameByGuid.has(file.name))
+        {
+            var fileNameGuid = this.uploadFileNameByGuid.get(file.name);
+
+            this.dataModelService.getAllAlbumsPlayedFromFileToUser(fileNameGuid, userId).then(() =>
+            {
+                this.updateSelectedSongDetails(this.dataModelService.allAlbumsPlayedFromFileToUserResponse);
+            });
+        }
+    }
+
+    //#endregion
+
+    //#region Page Control Handlers
+
+    public selectedFile()
+    {
+        this.uploader.uploadAll();
+        var queueLength = this.uploader.queue.length;
+        if (queueLength > 0)
+        {
+            this.fileInfoLatest = this.uploader.queue[queueLength - 1];
+            this.fileIsSelected = true;
+        }
+    }
+
+    public async onSelectedFileSubmitted()
+    {
+        var fileInfo: any = this.fileInfoLatest;
+        const file: File = fileInfo._file;
+        var fileNameGuid = this.getGuidForSubmittedFile(fileInfo);
+
+        await this.fileUploadService.asyncUploadFile(fileNameGuid, [file]);
+
+        this.uploadFileNameByGuid.set(this.uploadFileName, fileNameGuid);
+        await this.onGetDetails(this.fileInfoLatest);
+    }
+
+
+    public onFileReset(): void
+    {
+        this.fileInput.nativeElement.value = '';
+        this.songsFilesDetailsResponse = null;
+        this.songsFilesDetailsResponseRxed = false;
+        this.fileIsSelected = false;
+        this.fileIsUploaded = false;
+    }
+
+    public async onFileSetForUser()
+    {
+        await this.setFileSongsForUser(this.fileInfoLatest, this.currentLoginService.userId);
+    }
+
+    //#endregion
+
+    //#region Data Table implementation
+
+    @ViewChild('itemsTablePaginator') public itemsTablePaginator: MatPaginator;
+    @ViewChild('itemsTableSort') public itemsTableSort: MatSort;
+
+    public setupDataTable(albumsData: AlbumPlayed[]): void
+    {
+        this.items = albumsData;
+        this.itemsDataSource = new MatTableDataSource(this.items);
+        this.setupItemsPagingAndSorting();
+    }
+
+
+    public items: any[];
+    public itemsDisplayedColumns: string[] = this.getItemsDisplayedColumns();
+    public itemsDataSource: MatTableDataSource<any>;
+
+    public getItemsDisplayedColumns(): string[]
+    {
+        var columns =
+        [
+            'date',
+            'location',
+            'artist',
+            'album'
+        ];
+
+        return columns;
+    }
+
+    public setupItemsPagingAndSorting(): void
+    {
+        if (this.items != null)
+        {
+            setTimeout(() =>
+            {
+                this.itemsDataSource.paginator = this.itemsTablePaginator;
+                this.itemsDataSource.sort = this.itemsTableSort;
+                this.itemsTableSort.sortChange.subscribe(() =>
+                {
+                    this.itemsTablePaginator.pageIndex = 0;
+                    this.itemsTablePaginator._changePageSize(this.itemsTablePaginator.pageSize);
+                });
+            });
+        }
+    }
+
+    public applyItemsFilter(filterValue: string)
+    {
+        this.itemsDataSource.filter = filterValue.trim().toLowerCase();
+
+        if (this.itemsDataSource.paginator)
+        {
+            this.itemsTablePaginator.pageIndex = 0;
+            this.itemsTablePaginator._changePageSize(this.itemsTablePaginator.pageSize);
+        }
+    }
+
+
+    //#endregion
+
+
 }

@@ -14,6 +14,19 @@ export interface IAlbumPlayed extends IDbElement
 
 export class AlbumPlayed implements IAlbumPlayed
 {
+    static fromData(data: IAlbumPlayed)
+    {
+        return new this(
+            data._id,
+            data.date,
+            data.location,
+            data.artist,
+            data.album,
+            data.userName,
+            data.imagePath,
+            data.playerLink);
+    }
+
     constructor(
         public _id: string = "",
         public date: Date = new Date(),
