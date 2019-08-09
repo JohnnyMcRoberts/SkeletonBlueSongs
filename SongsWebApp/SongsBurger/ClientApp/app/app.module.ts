@@ -7,6 +7,7 @@ import { ToDoListComponent } from './Components/to-do-list/to-do-list.component'
 import { TextFileImportExportComponent } from './Components/text-file-import-export/text-file-import-export.component';
 import { LoginComponent } from './Components/login/login.component';
 import { AddAlbumComponent } from './Components/add-album/add-album.component';
+import { AlbumDetailComponent } from './Components/album-detail/album-detail.component';
 
 import { MainTablesComponent } from './Components/Tables/main-tables/main-tables.component';
 import { AlbumPlayedTableComponent } from './Components/Tables/album-played-table/album-played-table.component';
@@ -95,6 +96,7 @@ import {
         LoginComponent,
         TextFileImportExportComponent,
         AddAlbumComponent,
+        AlbumDetailComponent,
 
         MainTablesComponent,
         AlbumPlayedTableComponent,

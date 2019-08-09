@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DataModelService } from './../../Services/data-model.service';
 import { CurrentLoginService } from './../../Services/current-login.service';
 
-import { SongsValuesDetails, SongsFilesDetailsResponse } from './../../Models/SongsFilesDetails';
+import { SongsValuesDetails } from './../../Models/SongsFilesDetails';
 import { AlbumPlayed } from './../../Models/AlbumPlayed';
 import { AutocompleteCategoryFormField, CategoricalValuePair, ICategoricalValuePair } from './../../Models/AutocompleteCategoryFormField';
 
@@ -31,6 +31,8 @@ export class AddAlbumComponent implements OnInit, AfterViewInit
 
     public componentTitle: string;
     public songsValuesDetails: SongsValuesDetails;
+    public newAlbumPlayed: AlbumPlayed = null;
+    public newAlbumToDisplay: boolean = false;
 
     //#region Init Implementation
 
@@ -115,11 +117,13 @@ export class AddAlbumComponent implements OnInit, AfterViewInit
         return albumPlayed;
     }
 
-    public clearFormGroupControl(formGroup: FormGroup, controlName: string): void
+    public resetAutocompleteForm(categoryForm: AutocompleteCategoryFormField, categoricalValues: string[])
     {
-        formGroup.get(controlName).reset();
-        formGroup.get(controlName).markAsPristine();
-        formGroup.get(controlName).clearValidators();
+        categoryForm.form.reset();
+        categoryForm.form.clearValidators();
+        categoryForm.form.clearAsyncValidators();
+        categoryForm.form.markAsPristine();
+        categoryForm.setupCategoricalOptions(this.getAsCategoricalValuePairs(categoricalValues));
     }
 
     //#endregion
@@ -135,20 +139,19 @@ export class AddAlbumComponent implements OnInit, AfterViewInit
         //this.fileIsUploaded = false;
     }
 
-    public resetAutocompleteForm(categoryForm: AutocompleteCategoryFormField, categoricalValues:string[])
-    {
-        categoryForm.form.reset();
-        categoryForm.form.clearValidators();
-        categoryForm.form.clearAsyncValidators();
-        categoryForm.form.markAsPristine();
-        categoryForm.setupCategoricalOptions(this.getAsCategoricalValuePairs(categoricalValues));
-    }
-
     public onNewAlbumReset(): void
     {
         this.resetAutocompleteForm(this.locationForm, this.songsValuesDetails.locationValues);
         this.resetAutocompleteForm(this.artistForm, this.songsValuesDetails.artistValues);
         this.resetAutocompleteForm(this.albumForm, this.songsValuesDetails.albumValues);
+
+        this.newAlbumToDisplay = false;
+    }
+
+    public onNewAlbumDisplay(): void
+    {
+        this.newAlbumPlayed = this.getNewAlbumPlayed();
+        this.newAlbumToDisplay = true;
     }
 
     //#endregion

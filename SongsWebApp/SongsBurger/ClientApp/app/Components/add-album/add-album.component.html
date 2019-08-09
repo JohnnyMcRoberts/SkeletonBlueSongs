@@ -147,6 +147,16 @@
 
           </td>
 
+          <td>
+
+            <button mat-raised-button
+                    [disabled]="!addAlbumGroup.valid"
+                    (click)="onNewAlbumDisplay()">
+              Display Details
+            </button>
+
+          </td>
+
         </tr>
 
       </table>
@@ -154,5 +164,15 @@
     </div>
 
   </form>
+  
+  
+  <div *ngIf="newAlbumToDisplay">
+                  
+    <app-album-detail [albumPlayed]="newAlbumPlayed">
+
+    </app-album-detail>
+
+
+  </div>
 
 </div>
