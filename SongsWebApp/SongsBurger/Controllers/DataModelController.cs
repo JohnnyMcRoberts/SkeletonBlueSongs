@@ -26,12 +26,33 @@
         private readonly MongoDbSettings _dbConfig;
         private readonly FileUploadSettings _uploaderSettings;
         private readonly AlbumPlayedDatabase _albumPlayedDatabase;
+        private readonly UserDatabase _userDatabase;
+
+        private static readonly object Lock = new object();
 
         #endregion
 
-        #region Initialisation
+        #region Utility Methods
 
-        private static readonly object Lock = new object();
+        private void RemoveExistingItemsForUser(string userName)
+        {
+            lock (Lock)
+            {
+                if (_albumPlayedDatabase.LoadedItems.Any(x => x.UserName == userName))
+                {
+                    List<AlbumPlayed> itemsToRemove =
+                        _albumPlayedDatabase.LoadedItems.Where(x => x.UserName == userName).ToList();
+
+                    if (itemsToRemove.Any())
+                    {
+                        foreach (AlbumPlayed item in itemsToRemove)
+                        {
+                            _albumPlayedDatabase.RemoveItemFromDatabase(item);
+                        }
+                    }
+                }
+            }
+        }
 
         #endregion
 
@@ -49,16 +70,20 @@
                     albums.Add(new AlbumPlayed(albumPlayed));
                 }
             }
+
             if (albums.Count == 0)
-            albums.Add( 
-                new AlbumPlayed
-                {
-                    Artist = "a",
-                    Album = "b",
-                    Date = DateTime.Now,
-                    Location = "c",
-                    UserName = "d"
-                });
+            {
+                albums.Add(
+                    new AlbumPlayed
+                    {
+                        Artist = "a",
+                        Album = "b",
+                        Date = DateTime.Now,
+                        Location = "c",
+                        UserName = "d"
+                    });
+            }
+
             return albums;
         }
 
@@ -99,6 +124,44 @@
             return resp;
         }
 
+        [HttpGet("[action]/{fileKey}/{userId}")]
+        [ProducesResponseType(201, Type = typeof(SongsFilesDetailsResponse))]
+        [ProducesResponseType(400)]
+        public SongsFilesDetailsResponse GetAllAlbumsPlayedFromFileToUser(string fileKey, string userId)
+        {
+            var resp = GetAllAlbumsPlayedFromFile(fileKey);
+
+            if (resp.ErrorCode == (int) SongsFilesResponseCode.Success)
+            {
+                User foundUser = _userDatabase.LoadedItems.FirstOrDefault(x => x.Id.ToString() == userId);
+
+                if (foundUser == null)
+                {
+                    resp.ErrorCode = (int)SongsFilesResponseCode.InvalidUser;
+                    resp.FailReason = "No user for this id.";
+                }
+                else
+                {
+                    // Remove any items for this user from the table
+                    RemoveExistingItemsForUser(foundUser.Name);
+
+                    // Add the albums read from file with this user name
+                    lock (Lock)
+                    {
+                        foreach (AlbumPlayed fileAlbum in resp.AlbumsPlayed)
+                        {
+                            _albumPlayedDatabase.AddNewItemToDatabase(
+                                new AlbumPlayed(fileAlbum) { UserName = foundUser.Name }
+                                );
+                        }
+                    }
+
+                }
+            }
+            
+            return resp;
+        }
+
         #endregion
 
         #region Constructor
@@ -111,6 +174,7 @@
             _uploaderSettings = uploaderConfig.Value;
 
             _albumPlayedDatabase = new AlbumPlayedDatabase(_dbConfig.ConnectionString);
+            _userDatabase = new UserDatabase(_dbConfig.ConnectionString);
         }
 
         #endregion

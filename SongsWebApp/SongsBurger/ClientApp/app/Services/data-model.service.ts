@@ -31,12 +31,13 @@ export class DataModelService
                 error => console.error(error));
     }
 
-
     public albumsPlayedResponse: SongsFilesDetailsResponse;
-    fetchAllSongsFromFileData(key: string) {
+    fetchAllSongsFromFileData(key: string)
+    {
         return this.http.get<SongsFilesDetailsResponse>(this.requestUrl + "GetAllAlbumsPlayedFromFile/" + key)
-            .toPromise().then(result => {
-                this.albumsPlayedResponse = result as SongsFilesDetailsResponse;
+            .toPromise().then(result =>
+                {
+                    this.albumsPlayedResponse = result as SongsFilesDetailsResponse;
                 },
                 error => console.error(error));
     }
@@ -50,4 +51,15 @@ export class DataModelService
         console.log('No issues, waiting until promise is resolved...');
     }
 
+    public allAlbumsPlayedFromFileToUserResponse: any;
+    async getAllAlbumsPlayedFromFileToUser(fileKey: string, userId: string)
+    {
+        return this.http.get<SongsFilesDetailsResponse>(
+            this.requestUrl + "GetAllAlbumsPlayedFromFileToUser/" + fileKey + "/" + userId)
+            .toPromise().then(result =>
+                {
+                   this.allAlbumsPlayedFromFileToUserResponse = result as SongsFilesDetailsResponse;
+                },
+                error => console.error(error));
+    }
 }

@@ -6,7 +6,8 @@
     {
         Success = 0,
         InvalidFile,
-        NoSongsInFile
+        NoSongsInFile,
+        InvalidUser
     };
 
     public class SongsFilesDetailsResponse

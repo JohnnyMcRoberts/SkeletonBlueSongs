@@ -139,6 +139,23 @@ export class TextFileImportExportComponent
         return result;
     }
 
+    public async setFileSongsForUser(fileInfo: any, userId:string)
+    {
+        const file: File = fileInfo._file;
+
+        console.log(file.name);
+
+        if (this.uploadFileNameByGuid.has(file.name))
+        {
+            var fileNameGuid = this.uploadFileNameByGuid.get(file.name);
+
+            this.dataModelService.getAllAlbumsPlayedFromFileToUser(fileNameGuid, userId).then(() =>
+            {
+                this.updateSelectedSongDetails(this.dataModelService.allAlbumsPlayedFromFileToUserResponse);
+            });
+        }
+    }
+
     //#endregion
 
     //#region Page Control Handlers
@@ -176,13 +193,12 @@ export class TextFileImportExportComponent
         this.fileIsUploaded = false;
     }
 
-    public onFileSetForUser(): void
+    public async onFileSetForUser()
     {
-
+        await this.setFileSongsForUser(this.fileInfoLatest, this.currentLoginService.userId);
     }
 
     //#endregion
-
 
     //#region Data Table implementation
 
