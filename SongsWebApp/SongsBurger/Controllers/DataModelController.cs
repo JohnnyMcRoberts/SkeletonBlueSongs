@@ -54,6 +54,12 @@
             }
         }
 
+        private static void AddIfUnique(Dictionary<string, string> stringLookup, string location)
+        {
+            if (!stringLookup.ContainsKey(location))
+                stringLookup.Add(location, location);
+        }
+
         #endregion
 
         #region HTTP Requests
@@ -161,6 +167,66 @@
             
             return resp;
         }
+
+
+        [HttpGet("[action]")]
+        [ProducesResponseType(201, Type = typeof(SongsValuesDetails))]
+        public SongsValuesDetails GetSongsValuesDetails()
+        {
+            Dictionary<string, string> locationValues = new Dictionary<string, string>();
+            Dictionary<string, string> artistValues = new Dictionary<string, string>();
+            Dictionary<string, string> albumValues = new Dictionary<string, string>();
+
+            lock (Lock)
+            {
+                foreach (var albumPlayed in _albumPlayedDatabase.LoadedItems)
+                {
+                    AddIfUnique(locationValues, albumPlayed.Location);
+                    AddIfUnique(artistValues, albumPlayed.Artist);
+                    AddIfUnique(albumValues, albumPlayed.Album);
+                }
+            }
+
+
+            SongsValuesDetails details = new SongsValuesDetails
+            {
+                LocationValues = locationValues.Keys.ToArray(),
+                ArtistValues = artistValues.Keys.ToArray(),
+                AlbumValues = albumValues.Keys.ToArray()
+            };
+
+            return details;
+        }
+
+        /// <summary>
+        /// Adds a new user login.
+        /// </summary>
+        /// <param name="addAlbumRequest">The new album played item to try to add.</param>
+        /// <returns>The action result.</returns>
+        [HttpPost]
+        public IActionResult Post([FromBody] AlbumPlayed addAlbumRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            AlbumPlayedAddResponse response = new AlbumPlayedAddResponse
+            {
+                ErrorCode = (int)UserResponseCode.Success,
+                Album = addAlbumRequest,
+                FailReason = "",
+                UserId = ""
+            };
+
+            lock (Lock)
+            {
+                _albumPlayedDatabase.AddNewItemToDatabase(addAlbumRequest);
+            }
+
+            return Ok(response);
+        }
+
 
         #endregion
 

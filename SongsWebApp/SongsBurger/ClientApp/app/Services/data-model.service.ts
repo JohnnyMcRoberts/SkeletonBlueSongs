@@ -1,10 +1,10 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { AlbumPlayed } from './../Models/AlbumPlayed';
+import { AlbumPlayed, AlbumPlayedAddResponse } from './../Models/AlbumPlayed';
 
 
-import { SongsFilesDetailsRequest, SongsFilesDetailsResponse } from './../Models/SongsFilesDetails';
+import { SongsValuesDetails, SongsFilesDetailsResponse } from './../Models/SongsFilesDetails';
 
 const httpOptions =
 {
@@ -61,5 +61,28 @@ export class DataModelService
                    this.allAlbumsPlayedFromFileToUserResponse = result as SongsFilesDetailsResponse;
                 },
                 error => console.error(error));
+    }
+
+    public songsValuesDetails: SongsValuesDetails;
+    fetchSongsValuesDetailsData()
+    {
+        return this.http.get<SongsValuesDetails>(this.requestUrl + "GetSongsValuesDetails")
+            .toPromise().then(result =>
+                {
+                    this.songsValuesDetails = result as SongsValuesDetails;
+                },
+                error => console.error(error));
+    }
+
+
+    public addUserLoginResponse: any;
+    async addAsyncAlbumPlayed(request: AlbumPlayed)
+    {
+        this.addUserLoginResponse =
+                await this.http.post<AlbumPlayedAddResponse>(
+            this.requestUrl, request, httpOptions
+            ).toPromise();
+
+        console.log('No issues, waiting until promise is resolved...');
     }
 }

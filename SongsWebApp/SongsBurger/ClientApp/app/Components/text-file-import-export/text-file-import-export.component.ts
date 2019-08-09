@@ -183,7 +183,6 @@ export class TextFileImportExportComponent
         await this.onGetDetails(this.fileInfoLatest);
     }
 
-
     public onFileReset(): void
     {
         this.fileInput.nativeElement.value = '';

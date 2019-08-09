@@ -39,3 +39,33 @@ export class AlbumPlayed implements IAlbumPlayed
     {
     }
 };
+
+
+export interface IAlbumPlayedAddResponse
+{
+    album: IAlbumPlayed;
+    errorCode: number;
+    failReason: string;
+    userId: string;
+};
+
+export class AlbumPlayedAddResponse implements IAlbumPlayedAddResponse
+{
+    static fromData(data: IAlbumPlayedAddResponse)
+    {
+        var album: AlbumPlayed = AlbumPlayed.fromData(data.album);
+        return new this(
+            album,
+            data.errorCode,
+            data.failReason,
+            data.userId);
+    }
+
+    constructor(
+        public album: IAlbumPlayed = new AlbumPlayed(),
+        public errorCode: number = -1,
+        public failReason: string = "",
+        public userId: string = "") {
+    }
+};
+

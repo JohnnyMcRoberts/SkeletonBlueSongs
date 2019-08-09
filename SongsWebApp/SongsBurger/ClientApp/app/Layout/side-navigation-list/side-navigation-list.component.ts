@@ -33,6 +33,9 @@ export class SideNavigationListComponent implements OnInit {
         {
             link: "/import-export", text: "Text Import/Export", icon: "import_export"
         },
+        {
+            link: "/add-album", text: "Add Album Played", icon: "playlist_add"
+        },
     ];
 
     public static defaultMenuItemText: string = "To Do List";

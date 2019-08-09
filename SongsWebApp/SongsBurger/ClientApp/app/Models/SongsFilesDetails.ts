@@ -57,3 +57,30 @@ export class SongsFilesDetailsResponse implements ISongsFilesDetailsResponse
     {
     }
 };
+
+export interface ISongsValuesDetails
+{
+    locationValues: string[];
+    artistValues: string[];
+    albumValues: string[];
+};
+
+export class SongsValuesDetails implements ISongsValuesDetails
+{
+    static fromData(data: ISongsValuesDetails)
+    {
+        return new this(
+            data.locationValues,
+            data.artistValues,
+            data.albumValues);
+    }
+
+    constructor(
+        public locationValues: string[] = new Array<string>(),
+        public artistValues: string[] = new Array<string>(),
+        public albumValues: string[] = new Array<string>())
+    {
+    }
+};
+
+
