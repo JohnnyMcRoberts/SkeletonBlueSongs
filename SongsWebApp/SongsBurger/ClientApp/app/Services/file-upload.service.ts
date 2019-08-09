@@ -49,4 +49,32 @@ export class FileUploadService
         });
     }
 
+
+
+    public uploadFileResponse: any;
+    async asyncUploadFile(id: string, files: File[])
+    {
+        if (files.length === 0)
+            return;
+
+        const formData = new FormData();
+
+        for (let file of files)
+        {
+            formData.append(file.name, file);
+        }
+
+        let url: string = this.requestUrl + id.toString();
+        const uploadReq = new HttpRequest('POST', url, formData,
+            {
+                reportProgress: true,
+            });
+
+
+        await this.http.request(uploadReq).toPromise();
+
+        console.log('asyncUploadFile: No issues, waiting until promise is resolved...');
+    }
+
+
 }

@@ -5,7 +5,6 @@ import { SongsFilesDetailsRequest, SongsFilesDetailsResponse } from './../../Mod
 
 import { CurrentLoginService } from './../../Services/current-login.service';
 import { FileUploadService } from './../../Services/file-upload.service';
-import { SongsFilesDetailsService } from './../../Services/songs-files-details.service';
 import { DataModelService } from './../../Services/data-model.service';
 
 export interface IHash
@@ -25,7 +24,6 @@ export class TextFileImportExportComponent
     constructor(
         private currentLoginService: CurrentLoginService,
         private fileUploadService: FileUploadService,
-        private songsFilesDetailsService: SongsFilesDetailsService,
         private dataModelService: DataModelService
         )
     {
@@ -35,26 +33,33 @@ export class TextFileImportExportComponent
         });
 
     }
-
-    public tmpFolder: string = "temp";
-
+    
     @ViewChild('fileInput') fileInput: any;
+
+    //#region Local data
+
     public uploader: FileUploader;
 
-    public uploadFile()
-    {
-        //this.uploader.clearQueue();
-        this.uploader.uploadAll();
-        this.fileInput.nativeElement.value = '';
-    }
+    public fileInfoLatest: any;
 
-    // File upload
-    public uploadFileName: string;
+    public fileIsSelected: boolean = false;
+    public fileIsUploaded: boolean = false;
+    public songsFilesDetailsResponseRxed: boolean = false;
     public isSubmitted: boolean;
+
+    public uploadFileName: string;
     public visibilityHash: IHash = {};
-    public isCheckThumbnail: IHash = {};
     public savedFilesHash: IHash = {};
-    public onFileSubmitted(fileInfo: any)
+    public uploadFileNameByGuid: Map<string, string> = new Map<string, string>();
+
+    public songFileDetails: Array<any>;
+    public songsFilesDetailsResponse: SongsFilesDetailsResponse = null;
+
+    //#endregion
+
+    //#region File Upload helper methods
+
+    public getGuidForSubmittedFile(fileInfo: any): string
     {
         const file: File = fileInfo._file;
         this.visibilityHash[file.name] = true;
@@ -62,15 +67,17 @@ export class TextFileImportExportComponent
         console.log(file.name);
 
         this.uploadFileName = file.name;
-        var fileNameGuid = this.getNewGuid();
+        var fileNameGuid: string = this.getNewGuid();
+        return fileNameGuid;
+    }
+
+    public onFileSubmitted(fileInfo: any)
+    {
+        const file: File = fileInfo._file;
+        var fileNameGuid = this.getGuidForSubmittedFile(fileInfo);
         this.fileUploadService.upload(fileNameGuid, [file]);
         this.uploadFileNameByGuid.set(this.uploadFileName, fileNameGuid);
     }
-
-    public uploadFileNameByGuid: Map<string, string> = new  Map<string, string>();
-
-    // File calculate details.
-    public songFileDetails: Array<any>;
 
     public async onGetDetails(fileInfo: any)
     {
@@ -89,8 +96,6 @@ export class TextFileImportExportComponent
         }
     }
 
-    public songsFilesDetailsResponse: SongsFilesDetailsResponse = null;
-    public songsFilesDetailsResponseRxed: boolean = false;
     public updateSelectedSongDetails(songsFilesDetailsResponse: any)
     {
         this.songsFilesDetailsResponseRxed = true;
@@ -102,9 +107,11 @@ export class TextFileImportExportComponent
         {
             this.songsFilesDetailsResponse = SongsFilesDetailsResponse.fromData(songsFilesDetailsResponse);
             console.log("Response OK");
+
+            
+            this.fileIsUploaded = true;
         }
     }
-
 
     public getNewGuid(): string
     {
@@ -125,4 +132,48 @@ export class TextFileImportExportComponent
         }
         return result;
     }
+
+    //#endregion
+
+    //#region Page Control Handlers
+
+    public selectedFile()
+    {
+        this.uploader.uploadAll();
+        var queueLength = this.uploader.queue.length;
+        if (queueLength > 0)
+        {
+            this.fileInfoLatest = this.uploader.queue[queueLength - 1];
+            this.fileIsSelected = true;
+        }
+    }
+
+    public async onSelectedFileSubmitted()
+    {
+        var fileInfo: any = this.fileInfoLatest;
+        const file: File = fileInfo._file;
+        var fileNameGuid = this.getGuidForSubmittedFile(fileInfo);
+
+        await this.fileUploadService.asyncUploadFile(fileNameGuid, [file]);
+
+        this.uploadFileNameByGuid.set(this.uploadFileName, fileNameGuid);
+        await this.onGetDetails(this.fileInfoLatest);
+    }
+
+
+    public onFileReset(): void
+    {
+        this.fileInput.nativeElement.value = '';
+        this.songsFilesDetailsResponse = null;
+        this.songsFilesDetailsResponseRxed = false;
+        this.fileIsSelected = false;
+        this.fileIsUploaded = false;
+    }
+
+    public onFileSetForUser(): void
+    {
+
+    }
+
+    //#endregion
 }
