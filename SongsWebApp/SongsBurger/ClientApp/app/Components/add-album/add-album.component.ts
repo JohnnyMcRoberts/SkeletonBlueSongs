@@ -73,7 +73,8 @@ export class AddAlbumComponent implements OnInit, AfterViewInit
             {
                 location: this.locationForm.form,
                 artist: this.artistForm.form,
-                album: this.albumForm.form
+                album: this.albumForm.form,
+                imageUrl: ['']
             }
         );
     }
@@ -112,6 +113,8 @@ export class AddAlbumComponent implements OnInit, AfterViewInit
         albumPlayed.location = this.locationForm.optionValue;
         albumPlayed.artist = this.artistForm.optionValue;
         albumPlayed.album = this.albumForm.optionValue;
+        albumPlayed.imagePath = this.addAlbumGroup.value.imageUrl;
+
         albumPlayed.userName = this.currentLoginService.name;
 
         return albumPlayed;
@@ -125,6 +128,14 @@ export class AddAlbumComponent implements OnInit, AfterViewInit
         categoryForm.form.markAsPristine();
         categoryForm.setupCategoricalOptions(this.getAsCategoricalValuePairs(categoricalValues));
     }
+
+    public imageUrlValueChanged(event: any)
+    {
+        var imageUrl = this.addAlbumGroup.value.imageUrl;
+        console.log("imageUrlValueChanged: " + imageUrl.toString());
+        this.change.emit(event);
+    }
+
 
     //#endregion
 
@@ -141,6 +152,12 @@ export class AddAlbumComponent implements OnInit, AfterViewInit
 
     public onNewAlbumReset(): void
     {
+        var imageForm = this.addAlbumGroup.get('imageUrl');
+        imageForm.reset();
+        imageForm.clearValidators();
+        imageForm.clearAsyncValidators();
+        imageForm.markAsPristine();
+
         this.resetAutocompleteForm(this.locationForm, this.songsValuesDetails.locationValues);
         this.resetAutocompleteForm(this.artistForm, this.songsValuesDetails.artistValues);
         this.resetAutocompleteForm(this.albumForm, this.songsValuesDetails.albumValues);
