@@ -143,15 +143,8 @@ export class AddAlbumComponent implements OnInit, AfterViewInit
 
     public async onAddNewAlbum()
     {
-
         this.newAlbumPlayed = this.getNewAlbumPlayed();
         console.log('onAddNewAlbum -> newUserName : ', this.newAlbumPlayed.artist);
-
-        //var addUserReq: UserAddRequest =
-        //    new UserAddRequest(this.newUserFormGroup.value.newUserName,
-        //        this.newUserFormGroup.value.password,
-        //        this.newUserFormGroup.value.newUserDescription,
-        //        this.newUserFormGroup.value.newUserEmail);
 
         await this.dataModelService.addAsyncAlbumPlayed(this.newAlbumPlayed);
 
@@ -164,6 +157,7 @@ export class AddAlbumComponent implements OnInit, AfterViewInit
         else
         {
             console.log("Response OK");
+            this.onNewAlbumReset();
         }
     }
 
