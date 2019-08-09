@@ -54,6 +54,12 @@
             }
         }
 
+        private static void AddIfUnique(Dictionary<string, string> stringLookup, string location)
+        {
+            if (!stringLookup.ContainsKey(location))
+                stringLookup.Add(location, location);
+        }
+
         #endregion
 
         #region HTTP Requests
@@ -160,6 +166,36 @@
             }
             
             return resp;
+        }
+
+
+        [HttpGet("[action]")]
+        [ProducesResponseType(201, Type = typeof(SongsValuesDetails))]
+        public SongsValuesDetails GetSongsValuesDetails()
+        {
+            Dictionary<string, string> locationValues = new Dictionary<string, string>();
+            Dictionary<string, string> artistValues = new Dictionary<string, string>();
+            Dictionary<string, string> albumValues = new Dictionary<string, string>();
+
+            lock (Lock)
+            {
+                foreach (var albumPlayed in _albumPlayedDatabase.LoadedItems)
+                {
+                    AddIfUnique(locationValues, albumPlayed.Location);
+                    AddIfUnique(artistValues, albumPlayed.Artist);
+                    AddIfUnique(albumValues, albumPlayed.Album);
+                }
+            }
+
+
+            SongsValuesDetails details = new SongsValuesDetails
+            {
+                LocationValues = locationValues.Keys.ToArray(),
+                ArtistValues = artistValues.Keys.ToArray(),
+                AlbumValues = albumValues.Keys.ToArray()
+            };
+
+            return details;
         }
 
         #endregion

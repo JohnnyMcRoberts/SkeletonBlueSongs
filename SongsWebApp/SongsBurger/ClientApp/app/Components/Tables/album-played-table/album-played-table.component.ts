@@ -24,7 +24,6 @@ export class AlbumPlayedTableComponent implements OnInit, AfterViewInit
 
     public componentTitle: string;
 
-
     ngOnInit()
     {
         this.dataModelService.fetchAllAlbumPlayedData().then(() =>
@@ -54,8 +53,6 @@ export class AlbumPlayedTableComponent implements OnInit, AfterViewInit
             this.setupDataTable(this.albumsPlayed);
         }
     }
-
-
 
     //#region Data Table implementation
 
@@ -114,7 +111,6 @@ export class AlbumPlayedTableComponent implements OnInit, AfterViewInit
             this.itemsTablePaginator._changePageSize(this.itemsTablePaginator.pageSize);
         }
     }
-
 
     //#endregion
 

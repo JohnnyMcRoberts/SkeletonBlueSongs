@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AlbumPlayed } from './../Models/AlbumPlayed';
 
 
-import { SongsFilesDetailsRequest, SongsFilesDetailsResponse } from './../Models/SongsFilesDetails';
+import { SongsValuesDetails, SongsFilesDetailsResponse } from './../Models/SongsFilesDetails';
 
 const httpOptions =
 {
@@ -59,6 +59,17 @@ export class DataModelService
             .toPromise().then(result =>
                 {
                    this.allAlbumsPlayedFromFileToUserResponse = result as SongsFilesDetailsResponse;
+                },
+                error => console.error(error));
+    }
+
+    public songsValuesDetails: SongsValuesDetails;
+    fetchSongsValuesDetailsData()
+    {
+        return this.http.get<SongsValuesDetails>(this.requestUrl + "GetSongsValuesDetails")
+            .toPromise().then(result =>
+                {
+                    this.songsValuesDetails = result as SongsValuesDetails;
                 },
                 error => console.error(error));
     }
