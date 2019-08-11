@@ -78,6 +78,31 @@ export class TextFileImportExportComponent
 
     //#region File Upload helper methods
 
+    public albumsPlayed: AlbumPlayed[] = new Array<AlbumPlayed>();
+
+    ngOnInit()
+    {
+        this.dataModelService.fetchAllAlbumPlayedData().then(() =>
+        {
+            this.albumsPlayed = this.dataModelService.albumsPlayed;
+
+            this.albumsPlayed = new Array<AlbumPlayed>();
+            for (let album of this.dataModelService.albumsPlayed)
+            {
+                const newAlbum = AlbumPlayed.fromData(album);
+
+                if (newAlbum.userName === this.currentLoginService.name)
+                {
+                    this.albumsPlayed.push(newAlbum);
+                }
+            }
+        });
+    }
+
+    //#endregion
+
+    //#region File Upload helper methods
+
     public uploader: FileUploader;
 
     public fileInfoLatest: any;
@@ -192,6 +217,23 @@ export class TextFileImportExportComponent
         }
     }
 
+    public async addFileUpdateSongsForUser(fileInfo: any, userId: string)
+    {
+        const file: File = fileInfo._file;
+
+        console.log(file.name);
+
+        if (this.uploadFileNameByGuid.has(file.name))
+        {
+            var fileNameGuid = this.uploadFileNameByGuid.get(file.name);
+
+            this.dataModelService.getAllAlbumsPlayedFromFileUpdatesToUser(fileNameGuid, userId).then(() =>
+            {
+                this.updateSelectedSongDetails(this.dataModelService.allAlbumsPlayedFromFileUpdatesToUser);
+            });
+        }
+    }
+
     //#endregion
 
     //#region Page Control Handlers
@@ -232,6 +274,78 @@ export class TextFileImportExportComponent
     {
         await this.setFileSongsForUser(this.fileInfoLatest, this.currentLoginService.userId);
     }
+
+    public async onFileAddUpdatesForUser()
+    {
+        await this.addFileUpdateSongsForUser(this.fileInfoLatest, this.currentLoginService.userId);
+    }
+
+
+    public async onDisplayExportData()
+    {
+        switch (this.selectedExportType)
+        {
+            case ExportFileType.CSV:
+                {
+                    this.displayText = this.getExportDataAsCsv();
+                    this.exportDataToDisplay = true;
+                }
+                break;
+
+            case ExportFileType.JSON:
+                {
+                    this.displayText = JSON.stringify(this.albumsPlayed, null, '\t');
+                    this.exportDataToDisplay = true;
+                }
+                break;
+
+            case ExportFileType.XML:
+                {
+                    this.displayText = this.getExportDataAsXml();
+                    this.exportDataToDisplay = true;
+                }
+                break;
+
+            case ExportFileType.Text:
+                {
+                    await this.getExportDataAsText();
+                    this.exportDataToDisplay = true;
+                }
+                break;
+        }
+
+    }
+
+    public async onExportDataToFile()
+    {
+        switch (this.selectedExportType)
+        {
+            case ExportFileType.CSV:
+                {
+                    this.displayText = this.getExportDataAsCsv();
+                    this.exportDataToDisplay = true;
+                    let blob = new Blob([this.displayText], { type: 'text/csv' });
+                    FileSaver.saveAs(blob, "SongsPlayed.csv");
+                }
+                break;
+
+            case ExportFileType.JSON:
+                {
+                    this.displayText = JSON.stringify(this.albumsPlayed, null, '\t');
+                    this.exportDataToDisplay = true;
+                    let blob = new Blob([this.displayText], { type: "application/json" });
+                    FileSaver.saveAs(blob, "SongsPlayed.json");
+                }
+                break;
+
+            case ExportFileType.XML:
+                {
+                    this.displayText = this.getExportDataAsXml();
+                    this.exportDataToDisplay = true;
+                    let blob = new Blob([this.displayText], { type: 'text/xml' });
+                    FileSaver.saveAs(blob, "SongsPlayed.xml");
+                }
+                break;
 
     public async onDisplayExportData()
     {

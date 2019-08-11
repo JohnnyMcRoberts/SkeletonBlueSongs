@@ -77,6 +77,12 @@
                     string.Format("{0} is not the correct format. Should be yyyyMMddThhmmZ", dateString));
             }
 
+            var yearStr = dateString.Substring(0, 4);
+            var monthStr = dateString.Substring(4, 2);
+            var dayStr = dateString.Substring(6, 2);
+            var hourStr = dateString.Substring(9, 2);
+            var minStr = dateString.Substring(11, 2);
+
             DateTime dt = DateTime.ParseExact(dateString, "yyyyMMddThhmmZ", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
 
             return dt;
@@ -219,6 +225,103 @@
             return resp;
         }
 
+        [HttpGet("[action]/{fileKey}/{userId}")]
+        [ProducesResponseType(201, Type = typeof(SongsFilesDetailsResponse))]
+        [ProducesResponseType(400)]
+        public SongsFilesDetailsResponse GetAllAlbumsPlayedFromFileUpdatesToUser(string fileKey, string userId)
+        {
+            var resp = GetAllAlbumsPlayedFromFile(fileKey);
+
+            if (resp.ErrorCode == (int)SongsFilesResponseCode.Success)
+            {
+                User foundUser = _userDatabase.LoadedItems.FirstOrDefault(x => x.Id.ToString() == userId);
+
+                if (foundUser == null)
+                {
+                    resp.ErrorCode = (int)SongsFilesResponseCode.InvalidUser;
+                    resp.FailReason = "No user for this id.";
+                }
+                else
+                {
+                    // Add the more recent albums read from file with this user name
+                    lock (Lock)
+                    {
+                        // Get the existing items for this user from the table
+                        AlbumPlayed latestAlbum =
+                            _albumPlayedDatabase.LoadedItems
+                                .Where(x => x.UserName == foundUser.Name)
+                                .OrderBy(x => x.Date).Last();
+
+                        if (latestAlbum != null)
+                        {
+                            foreach (var fileAlbum in resp.AlbumsPlayed.OrderBy(x => x.Date))
+                            {
+                                if (latestAlbum.Date < fileAlbum.Date)
+                                {
+                                    _albumPlayedDatabase.AddNewItemToDatabase(
+                                        new AlbumPlayed
+                                        {
+                                            Date = fileAlbum.Date,
+                                            Location = fileAlbum.Location,
+                                            Artist = fileAlbum.Artist,
+                                            Album = fileAlbum.Album,
+                                            ImagePath = fileAlbum.ImagePath,
+                                            PlayerLink = fileAlbum.PlayerLink,
+
+                                            UserName = foundUser.Name
+                                        }
+                                    );
+
+                                }
+                            }
+                        }
+
+                    }
+
+                }
+            }
+
+            return resp;
+        }
+
+        [HttpGet("[action]/{start}/{end}/{userId}")]
+        public IEnumerable<DisplayAlbum> GetSongsReportDetails(string start, string end, string userId)
+        {
+            var albums = new ObservableCollection<DisplayAlbum>();
+
+            var startTime = BuildDateTimeFromYAFormat(start);
+            var endTime = BuildDateTimeFromYAFormat(end);
+
+            User foundUser = _userDatabase.LoadedItems.FirstOrDefault(x => x.Id.ToString() == userId);
+            if (foundUser == null)
+            {
+                return albums;
+            }
+
+
+            lock (Lock)
+            {
+                var matchedAlbums =
+                    _albumPlayedDatabase.LoadedItems
+                        .Where(x => x.UserName == foundUser.Name && x.Date <= endTime && x.Date >= startTime)
+                        .OrderBy(x => x.Date);
+
+                Dictionary<string, AlbumPlayed> albumsDictionary = new Dictionary<string, AlbumPlayed>();
+                foreach (var album in matchedAlbums)
+                {
+                    var namesPair = album.Artist + " " + album.Album;
+                    if (!albumsDictionary.ContainsKey(namesPair))
+                        albumsDictionary.Add(namesPair, album);
+                }
+
+                foreach (var key in albumsDictionary.Keys.OrderBy(x => x))
+                {
+                    albums.Add(new DisplayAlbum(albumsDictionary[key]));
+                }
+            }
+            
+            return albums;
+        }
 
         [HttpGet("[action]/{start}/{end}/{userId}")]
         public IEnumerable<DisplayAlbum> GetSongsReportDetails(string start, string end, string userId)

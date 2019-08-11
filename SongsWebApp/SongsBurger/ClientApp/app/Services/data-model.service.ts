@@ -63,6 +63,19 @@ export class DataModelService
                 error => console.error(error));
     }
 
+    public allAlbumsPlayedFromFileUpdatesToUser: any;
+    async getAllAlbumsPlayedFromFileUpdatesToUser(fileKey: string, userId: string)
+    {
+        return this.http.get<SongsFilesDetailsResponse>(
+            this.requestUrl + "GetAllAlbumsPlayedFromFileUpdatesToUser/" + fileKey + "/" + userId)
+            .toPromise().then(result =>
+                {
+                    this.allAlbumsPlayedFromFileUpdatesToUser = result as SongsFilesDetailsResponse;
+                },
+                error => console.error(error));
+    }
+
+
     public songsValuesDetails: SongsValuesDetails;
     fetchSongsValuesDetailsData()
     {
@@ -110,10 +123,11 @@ export class DataModelService
 
 
     public deleteAlbumPlayedResponse: any;
-    async  deleteAsyncAlbumPlayed(album: AlbumPlayed) {
+    async  deleteAsyncAlbumPlayed(album: AlbumPlayed)
+    {
         this.deleteAlbumPlayedResponse =
             await this.http.delete<AlbumPlayedAddResponse>(
-                this.requestUrl + "/" + album.id, httpOptions
+                this.requestUrl + album.id, httpOptions
             ).toPromise();
 
         console.log('No issues, waiting until promise is resolved...');
@@ -132,13 +146,30 @@ export class DataModelService
 
     private dateToIso(date: Date): string
     {
-        return date.getUTCFullYear() +
-            this.pad(date.getUTCMonth() + 1) +
-            this.pad(date.getUTCDate()) +
-            'T' +
-            this.pad(date.getUTCHours()) +
-            this.pad(date.getUTCMinutes()) +
-            'Z';
+        var fullYear = date.getUTCFullYear();
+        var fullMonth = this.pad(date.getUTCMonth() + 1);
+        var fullDay = this.pad(date.getUTCDate());
+        var fullHours = this.pad(date.getUTCHours());
+        var fullMinutes = this.pad(date.getUTCMinutes());
+
+        var dateString: string = "";
+        dateString += fullYear;
+        dateString += fullMonth;
+        dateString += fullDay;
+        dateString += "T";
+        dateString += fullHours;
+        dateString += fullMinutes;
+        dateString += "Z";
+
+        return dateString;
+
+        //return date.getUTCFullYear() +
+        //    this.pad(date.getUTCMonth() + 1) +
+        //    this.pad(date.getUTCDate()) +
+        //    'T' +
+        //    this.pad(date.getUTCHours()) +
+        //    this.pad(date.getUTCMinutes()) +
+        //    'Z';
     }
 
     public songsReportDetails: AlbumPlayed[];
