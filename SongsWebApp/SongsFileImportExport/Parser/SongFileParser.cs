@@ -1,10 +1,9 @@
-﻿using System.Linq;
-
-namespace SongsFileImportExport.Parser
+﻿namespace SongsFileImportExport.Parser
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
 
     using SongsDatabase.DataModels;
 
@@ -93,6 +92,7 @@ namespace SongsFileImportExport.Parser
                 currentAlbumPlayed.Album = album;
                 albums.Add(currentAlbumPlayed);
                 currentAlbumPlayed = new AlbumPlayed(currentAlbumPlayed);
+                currentAlbumPlayed.Date.AddMinutes(1);
             }
             else if (line[0] == '\t' && line[1] == '\t')
             {

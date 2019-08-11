@@ -1,0 +1,92 @@
+﻿<div *ngIf="!currentLoginService.isLoggedIn" class="not-logged-in-div">
+    <h1>Not currently Logged In</h1>
+</div>
+<div *ngIf="currentLoginService.isLoggedIn">
+    <p *ngIf="!items">{{componentTitle}}</p>
+
+
+    <div class="mat-elevation-z8" *ngIf="items">
+        <table class="noborders-table">
+            <tr class="noborders">
+                <td class="noborders">
+                    <mat-form-field appearance="fill">
+                        <input matInput (keyup)="applyItemsFilter($event.target.value)"
+                               placeholder="Filter">
+                    </mat-form-field>
+                </td>
+                <td class="noborders">
+                    <mat-paginator #itemsTablePaginator
+                                   [length]="5"
+                                   [pageSize]="6"
+                                   [pageSizeOptions]="[5, 10, 20]"
+                                   showFirstLastButtons>
+                    </mat-paginator>
+                </td>
+            </tr>
+        </table>
+
+        <mat-table #table [dataSource]="itemsDataSource"
+                   #itemsTableSort="matSort"
+                   matSortActive="date"
+                   matSortDisableClear
+                   matSortDirection="asc"
+                   matSort>
+
+            <ng-container matColumnDef="date">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Date </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.date | date :'fullDate'}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="location">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Location </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.location}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="artist">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Artist </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.artist}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="album">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Album </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.album}}</mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="itemsDisplayedColumns"></mat-header-row>
+
+            <mat-row *matRowDef="let row; columns: itemsDisplayedColumns"
+                     (click)="onItemsRowClicked(row)"></mat-row>
+
+        </mat-table>
+
+    </div>
+
+
+    <div *ngIf="albumToEdit">
+        <mat-tab-group dynamicHeight #tabGroup>
+
+            <mat-tab label="Display">
+
+                <app-album-detail [albumPlayed]="editAlbumPlayed">
+
+                </app-album-detail>
+
+            </mat-tab>
+            <mat-tab label="Update">
+
+                <app-album-detail [albumPlayed]="editAlbumPlayed">
+
+                </app-album-detail>
+
+            </mat-tab>
+
+            <mat-tab label="Delete">
+
+
+            </mat-tab>
+
+
+        </mat-tab-group>
+
+    </div>
+</div>
