@@ -22,9 +22,6 @@ export class SideNavigationListComponent implements OnInit {
     public navigationMenuItems: NavigationMenuItem[] =
     [
         {
-            link: "/to-do-list", text: "To Do List", icon: "list_alt"
-        },
-        {
             link: "/login", text: "Login", icon: "lock_open"
         },
         {
@@ -36,6 +33,13 @@ export class SideNavigationListComponent implements OnInit {
         {
             link: "/add-album", text: "Add Album Played", icon: "playlist_add"
         },
+        {
+            link: "/edit-album", text: "Edit Album Played", icon: "edit"
+        },
+
+        {
+            link: "/to-do-list", text: "To Do List", icon: "list_alt"
+        }
     ];
 
     public static defaultMenuItemText: string = "To Do List";

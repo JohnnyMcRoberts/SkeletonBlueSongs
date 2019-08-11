@@ -108,7 +108,6 @@ export class AddAlbumComponent implements OnInit, AfterViewInit
         var albumPlayed: AlbumPlayed = new AlbumPlayed();
 
         albumPlayed.date = new Date();
-        albumPlayed.date.setHours(12, 0, 0);
 
         albumPlayed.location = this.locationForm.optionValue;
         albumPlayed.artist = this.artistForm.optionValue;
