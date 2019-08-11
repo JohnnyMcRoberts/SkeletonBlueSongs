@@ -32,19 +32,35 @@ export class ToDoListComponent
         {
             name: 'Create the new user login page',
             updated: new Date('07/08/19'),
-        }
-    ];
-
-    public toDoItems: ISection[] =
-    [
+        },
         {
             name: 'Read & display data from the text file',
             updated: new Date('08/08/19'),
         },
         {
             name: 'Add new recording page',
-            updated: new Date('08/08/19'),
+            updated: new Date('09/08/19'),
+        },
+        {
+            name: 'Add the Edit and Delete page',
+            updated: new Date('11/08/19'),
+        },
+        {
+            name: 'Complete the Update and delete functionality',
+            updated: new Date('12/08/19'),
+        },
+        {
+            name: 'Add a report page',
+            updated: new Date('13/08/19'),
+        },
+        {
+            name: 'Include the import/export for a few formats',
+            updated: new Date('23/08/19'),
         }
+    ];
+
+    public toDoItems: ISection[] =
+    [
     ];
 
 }

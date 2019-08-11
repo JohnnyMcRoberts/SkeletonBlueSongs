@@ -5,7 +5,7 @@
     <Authors>Luis Tepepa</Authors>
     <Version>1.0.1</Version>
     <Company></Company>
-    <TypeScriptToolsVersion>3.0</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <Product />
   </PropertyGroup>
 

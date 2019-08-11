@@ -9,6 +9,7 @@ import { LoginComponent } from './Components/login/login.component';
 import { AddAlbumComponent } from './Components/add-album/add-album.component';
 import { EditAlbumComponent } from './Components/edit-album/edit-album.component';
 import { AlbumDetailComponent } from './Components/album-detail/album-detail.component';
+import { AlbumsReportComponent } from './Components/albums-report/albums-report.component';
 
 import { MainTablesComponent } from './Components/Tables/main-tables/main-tables.component';
 import { AlbumPlayedTableComponent } from './Components/Tables/album-played-table/album-played-table.component';
@@ -38,6 +39,10 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CdkTableModule } from '@angular/cdk/table';
+
+
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -99,6 +104,7 @@ import {
         AddAlbumComponent,
         EditAlbumComponent,
         AlbumDetailComponent,
+        AlbumsReportComponent,
 
         MainTablesComponent,
         AlbumPlayedTableComponent,
@@ -156,6 +162,8 @@ import {
 
         CdkTableModule,
 
+        OwlDateTimeModule,
+        OwlNativeDateTimeModule,
         AppRoutingModule
     ],
     providers:

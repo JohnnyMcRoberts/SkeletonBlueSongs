@@ -2,13 +2,11 @@
 {
     using System.IO;
 
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
 
     using Settings;
-    using Utilities;
-
-
 
     [Route("api/[controller]")]
     [ApiController]
@@ -21,7 +19,7 @@
         {
             try
             {
-                var file = Request.Form.Files[0];
+                IFormFile file = Request.Form.Files[0];
 
                 string uploadRootPath = _uploaderSettings.UploadFilesDirectory;
                 string newPath = Path.Combine(uploadRootPath, key);
@@ -33,7 +31,8 @@
                 if (file.Length > 0)
                 {
                     //string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    string fileName = FileUtilities.SongDetailsFileName;
+                    //string fileName = FileUtilities.SongDetailsFileName;
+                    string fileName = file.FileName;
                     string fullPath = Path.Combine(newPath, fileName);
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {

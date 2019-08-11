@@ -1,9 +1,10 @@
-﻿using System.Linq;
-
-namespace SongsFileImportExport.Test.Parser
+﻿namespace SongsFileImportExport.Test.Parser
 {
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
+
+
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using SongsDatabase.DataModels;
@@ -23,7 +24,7 @@ namespace SongsFileImportExport.Test.Parser
 
         #region Test utility Functions
 
-        private static void CheckAlbum_0(AlbumPlayed album)
+        public static void CheckAlbum_0(AlbumPlayed album)
         {
             Assert.IsNotNull(album);
 
@@ -43,7 +44,7 @@ namespace SongsFileImportExport.Test.Parser
             Assert.AreEqual(string.Empty, album.UserName);
         }
 
-        private static void CheckAlbum_1(AlbumPlayed album)
+        public static void CheckAlbum_1(AlbumPlayed album)
         {
             Assert.IsNotNull(album);
 
@@ -63,7 +64,7 @@ namespace SongsFileImportExport.Test.Parser
             Assert.AreEqual(string.Empty, album.UserName);
         }
 
-        private static void CheckAlbum_2(AlbumPlayed album)
+        public static void CheckAlbum_2(AlbumPlayed album)
         {
             Assert.IsNotNull(album);
 
@@ -84,7 +85,7 @@ namespace SongsFileImportExport.Test.Parser
         }
 
 
-        private static void CheckAlbum_3(AlbumPlayed album)
+        public static void CheckAlbum_3(AlbumPlayed album)
         {
             Assert.IsNotNull(album);
 
@@ -104,7 +105,7 @@ namespace SongsFileImportExport.Test.Parser
             Assert.AreEqual(string.Empty, album.UserName);
         }
 
-        private static void CheckAlbum_4(AlbumPlayed album)
+        public static void CheckAlbum_4(AlbumPlayed album)
         {
             Assert.IsNotNull(album);
 
@@ -124,7 +125,7 @@ namespace SongsFileImportExport.Test.Parser
             Assert.AreEqual(string.Empty, album.UserName);
         }
 
-        private static void CheckAlbum_5(AlbumPlayed album)
+        public static void CheckAlbum_5(AlbumPlayed album)
         {
             Assert.IsNotNull(album);
 
@@ -145,7 +146,7 @@ namespace SongsFileImportExport.Test.Parser
         }
 
 
-        private static void CheckAlbum_6(AlbumPlayed album)
+        public static void CheckAlbum_6(AlbumPlayed album)
         {
             Assert.IsNotNull(album);
 
@@ -165,7 +166,7 @@ namespace SongsFileImportExport.Test.Parser
             Assert.AreEqual(string.Empty, album.UserName);
         }
 
-        private static void CheckAlbum_7(AlbumPlayed album)
+        public static void CheckAlbum_7(AlbumPlayed album)
         {
             Assert.IsNotNull(album);
 
@@ -185,7 +186,7 @@ namespace SongsFileImportExport.Test.Parser
             Assert.AreEqual(string.Empty, album.UserName);
         }
 
-        private static void CheckAlbum_8(AlbumPlayed album)
+        public static void CheckAlbum_8(AlbumPlayed album)
         {
             Assert.IsNotNull(album);
 
@@ -206,7 +207,7 @@ namespace SongsFileImportExport.Test.Parser
         }
 
 
-        private static void CheckAlbum_Last(AlbumPlayed album)
+        public static void CheckAlbum_Last(AlbumPlayed album)
         {
             Assert.IsNotNull(album);
 

@@ -6,7 +6,8 @@
         DuplicateName,
         DuplicateEmail,
         UnknownUser,
-        IncorrectPassword
+        IncorrectPassword,
+        UnknownItem
     };
 
     public class UserAddResponse

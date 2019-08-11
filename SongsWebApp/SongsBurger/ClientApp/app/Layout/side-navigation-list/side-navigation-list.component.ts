@@ -36,13 +36,16 @@ export class SideNavigationListComponent implements OnInit {
         {
             link: "/edit-album", text: "Edit Album Played", icon: "edit"
         },
-
+        {
+            link: "/albums-report", text: "Albums Report", icon: "queue_music"
+        },
+        // Remove eventually
         {
             link: "/to-do-list", text: "To Do List", icon: "list_alt"
         }
     ];
 
-    public static defaultMenuItemText: string = "To Do List";
+    public static defaultMenuItemText: string = "Login";
 
     /** SideNavigationList ctor */
     constructor()

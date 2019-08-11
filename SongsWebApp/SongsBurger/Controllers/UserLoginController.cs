@@ -17,7 +17,6 @@
     {
         #region Private Data
 
-        private readonly MongoDbSettings _dbConfig;
         private readonly UserDatabase _userDatabase;
 
         #endregion
@@ -60,7 +59,7 @@
             // Correct password so populate the login response
             response.UserId = userLogin.Id.ToString();
             response.Description = userLogin.Description;
-            response.Email = userLogin.Id.ToString();
+            response.Email = userLogin.Email;
 
             return Ok(response);
         }
@@ -71,8 +70,8 @@
 
         public UserLoginController(IOptions<MongoDbSettings> dbConfig)
         {
-            _dbConfig = dbConfig.Value;
-            _userDatabase = new UserDatabase(_dbConfig.ConnectionString);
+            MongoDbSettings mongoDbSettings = dbConfig.Value;
+            _userDatabase = new UserDatabase(mongoDbSettings.ConnectionString);
         }
 
         #endregion
