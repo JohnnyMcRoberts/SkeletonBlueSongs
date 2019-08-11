@@ -25,24 +25,33 @@ export class SideNavigationListComponent implements OnInit {
             link: "/to-do-list", text: "To Do List", icon: "list_alt"
         },
         {
+            link: "/login", text: "Login", icon: "lock_open"
+        },
+        {
             link: "/main-tables", text: "Main Tables", icon: "vertical_split"
         },
         {
-            link: "/login", text: "Login", icon: "lock_open"
+            link: "/import-export", text: "Text Import/Export", icon: "import_export"
+        },
+        {
+            link: "/add-album", text: "Add Album Played", icon: "playlist_add"
         },
     ];
 
     public static defaultMenuItemText: string = "To Do List";
 
     /** SideNavigationList ctor */
-    constructor() {
+    constructor()
+    {
 
     }
 
-    ngOnInit() {
+    ngOnInit()
+    {
     }
 
-    public onSidenavClose = (param: any) => {
+    public onSidenavClose = (param: any) =>
+    {
         console.log("closed using :" + param);
         this.sidenavClose.emit();
         this.selectedMenuItem.emit(param.toString());

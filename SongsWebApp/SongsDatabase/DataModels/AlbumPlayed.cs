@@ -42,6 +42,18 @@
         [BsonElement("user_name")]
         public string UserName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the web address for the album cover image.
+        /// </summary>
+        [BsonElement("image_path")]
+        public string ImagePath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the link to play the album.
+        /// </summary>
+        [BsonElement("player_link")]
+        public string PlayerLink { get; set; }
+
         #endregion
 
         #region BaseMongoEntity Implementation
@@ -63,6 +75,8 @@
             Artist = string.Empty;
             Album = string.Empty;
             UserName = string.Empty;
+            ImagePath = string.Empty;
+            PlayerLink = string.Empty;
         }
 
         public AlbumPlayed(AlbumPlayed album)
@@ -72,9 +86,10 @@
             Artist = album.Artist;
             Album = album.Album;
             UserName = album.UserName;
+            ImagePath = album.ImagePath;
+            PlayerLink = album.PlayerLink;
         }
 
         #endregion 
-
     }
 }

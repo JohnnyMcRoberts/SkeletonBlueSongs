@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SongsDatabase\SongsDatabase.csproj" />
+    <ProjectReference Include="..\SongsFileImportExport\SongsFileImportExport.csproj" />
   </ItemGroup>
 
 </Project>

@@ -24,6 +24,14 @@ export class ToDoListComponent
         {
             name: 'Get Material and hamburger menu structure going',
             updated: new Date('30/07/19')
+        },
+        {
+            name: 'Read & display data from the Mongo DB',
+            updated: new Date('02/08/19'),
+        },
+        {
+            name: 'Create the new user login page',
+            updated: new Date('07/08/19'),
         }
     ];
 
@@ -31,11 +39,11 @@ export class ToDoListComponent
     [
         {
             name: 'Read & display data from the text file',
-            updated: new Date('02/08/19'),
+            updated: new Date('08/08/19'),
         },
         {
-            name: 'Read & display data from the Mongo DB',
-            updated: new Date('02/08/19'),
+            name: 'Add new recording page',
+            updated: new Date('08/08/19'),
         }
     ];
 
