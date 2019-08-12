@@ -112,6 +112,19 @@ export class AlbumPlayedTableComponent implements OnInit, AfterViewInit
         }
     }
 
+    public selectedTitle: string = '';
+    public displayAlbumPlayed: AlbumPlayed = null;
+    public showAllAlbumsPanelOpenState = true;
+
+    public onItemsRowClicked(row)
+    {
+        var albumPlayed = AlbumPlayed.fromData(row);
+        var title = albumPlayed.artist + " " + albumPlayed.album;
+
+        this.selectedTitle = title;
+        this.displayAlbumPlayed = albumPlayed;
+    }
+
     //#endregion
 
 

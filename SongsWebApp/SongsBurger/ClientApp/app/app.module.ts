@@ -39,6 +39,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CdkTableModule } from '@angular/cdk/table';
 
+
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 
@@ -156,6 +160,8 @@ import {
 
         CdkTableModule,
 
+        OwlDateTimeModule,
+        OwlNativeDateTimeModule,
         AppRoutingModule
     ],
     providers:

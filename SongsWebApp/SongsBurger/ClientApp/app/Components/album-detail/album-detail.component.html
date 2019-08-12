@@ -9,8 +9,9 @@
       <tr>
         <td></td>
         <td></td>
-        <td rowspan="3" *ngIf="selectedAlbumPlayed.imagePath !== ''">
-          <img src="{{selectedAlbumPlayed.imagePath}}" alt="Photo of a Shiba Inu" height="400"></td>
+        <td rowspan="4" *ngIf="selectedAlbumPlayed.imagePath !== ''">
+          <img src="{{selectedAlbumPlayed.imagePath}}" alt="Photo of a Shiba Inu" height="300">
+        </td>
       </tr>
       <tr>
         <td><b>Date:</b></td>
@@ -19,6 +20,12 @@
       <tr>
         <td><b>Location:</b></td>
         <td>{{selectedAlbumPlayed.location}}</td>
+      </tr>
+      <tr>
+        <td><b *ngIf="selectedAlbumPlayed.playerLink !== ''">Link:</b></td>
+        <td>
+          <a href="{{selectedAlbumPlayed.playerLink}}" target="_blank" *ngIf="selectedAlbumPlayed.playerLink !== ''">YouTube</a>
+        </td>
       </tr>
     </table>
   </mat-card-content>

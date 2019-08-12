@@ -92,7 +92,7 @@
                 currentAlbumPlayed.Album = album;
                 albums.Add(currentAlbumPlayed);
                 currentAlbumPlayed = new AlbumPlayed(currentAlbumPlayed);
-                currentAlbumPlayed.Date.AddMinutes(1);
+                currentAlbumPlayed.Date = currentAlbumPlayed.Date.AddMinutes(1);
             }
             else if (line[0] == '\t' && line[1] == '\t')
             {
@@ -184,7 +184,7 @@
                     return false;
                 }
 
-                date = new DateTime(year, monthOfYear, dayOfMonth, 12, 0, 0);
+                date = new DateTime(year, monthOfYear, dayOfMonth, 8, 0, 0);
                 return true;
             }
 
