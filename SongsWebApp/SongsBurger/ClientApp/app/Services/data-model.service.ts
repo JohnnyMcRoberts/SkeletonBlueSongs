@@ -74,13 +74,35 @@ export class DataModelService
                 error => console.error(error));
     }
 
-
     public addUserLoginResponse: any;
     async addAsyncAlbumPlayed(request: AlbumPlayed)
     {
         this.addUserLoginResponse =
                 await this.http.post<AlbumPlayedAddResponse>(
             this.requestUrl, request, httpOptions
+            ).toPromise();
+
+        console.log('No issues, waiting until promise is resolved...');
+    }
+
+
+    public updateAlbumPlayedResponse: any;
+    async  updateAsyncAlbumPlayed(album: AlbumPlayed)
+    {
+        this.updateAlbumPlayedResponse =
+            await this.http.put<AlbumPlayedAddResponse>(
+                this.requestUrl, album, httpOptions
+            ).toPromise();
+
+        console.log('No issues, waiting until promise is resolved...');
+    }
+
+
+    public deleteAlbumPlayedResponse: any;
+    async  deleteAsyncAlbumPlayed(album: AlbumPlayed) {
+        this.deleteAlbumPlayedResponse =
+            await this.http.delete<AlbumPlayedAddResponse>(
+                this.requestUrl + "/" + album.id, httpOptions
             ).toPromise();
 
         console.log('No issues, waiting until promise is resolved...');

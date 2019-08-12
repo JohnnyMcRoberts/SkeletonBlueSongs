@@ -1,10 +1,13 @@
-﻿import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+﻿import { Component, OnInit, Output, EventEmitter, AfterViewInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { DataModelService } from './../../Services/data-model.service';
 import { CurrentLoginService } from './../../Services/current-login.service';
 
-import { AlbumPlayed } from './../../Models/AlbumPlayed';
+import { AlbumPlayed, AlbumPlayedAddResponse } from './../../Models/AlbumPlayed';
+
+import { BaseAlbumEdit } from './../base-album-edit.component';
 
 @Component({
     selector: 'app-edit-album',
@@ -12,19 +15,23 @@ import { AlbumPlayed } from './../../Models/AlbumPlayed';
     styleUrls: ['./edit-album.component.scss']
 })
 /** EditAlbum component*/
-export class EditAlbumComponent implements OnInit, AfterViewInit
+export class EditAlbumComponent extends BaseAlbumEdit  implements OnInit, AfterViewInit
 {
     /** EditAlbum ctor */
     constructor(
-        private dataModelService: DataModelService,
-        private currentLoginService: CurrentLoginService)
+        public formBuilder: FormBuilder,
+        public dataModelService: DataModelService,
+        public currentLoginService: CurrentLoginService)
     {
-        this.componentTitle = "Loading Albums for User from database...";
+        super(formBuilder, dataModelService, currentLoginService);
     }
 
-    public componentTitle: string;
 
-    ngOnInit()
+    //#region BaseAlbumEdit Implementation
+
+    @Output() change = new EventEmitter();
+
+    public ngOnInitAddition()
     {
         this.dataModelService.fetchAllAlbumPlayedData().then(() =>
         {
@@ -41,18 +48,19 @@ export class EditAlbumComponent implements OnInit, AfterViewInit
                 }
             }
 
-            //this.booksDataSource = new MatTableDataSource(this.books);
             this.setupDataTable(this.albumsPlayed);
         });
-    }
+    };
 
-    ngAfterViewInit()
+    public ngAfterViewInitAddition()
     {
-        if (this.albumsPlayed !== undefined)
-        {
+        if (this.albumsPlayed !== undefined) {
             this.setupDataTable(this.albumsPlayed);
         }
-    }
+    };
+
+    //#endregion
+
 
     //#region Data Table implementation
 
@@ -121,12 +129,74 @@ export class EditAlbumComponent implements OnInit, AfterViewInit
 
         this.albumToEdit = true;
         this.editAlbumPlayed = albumPlayed;
+        this.newAlbumPlayed = albumPlayed;
+
+        this.setCurrentValues();
     }
+
     //#endregion
 
 
+    //#region Accordion State implementation
+
+    public showAllAlbumsPanelOpenState = true;
     public editAlbumPlayed: AlbumPlayed = null;
     public albumToEdit: boolean = false;
+
+
+    //#endregion
+
+
+    //#region Update Details
+
+
+    public selectedListeningTime = new FormControl(new Date());
+
+    public selectedMoment = new Date();
+
+    public setCurrentValues()
+    {
+        this.addAlbumGroup.setValue(
+            {
+                location: this.editAlbumPlayed.location,
+                artist: this.editAlbumPlayed.artist,
+                album: this.editAlbumPlayed.album,
+                imageUrl: this.editAlbumPlayed.imagePath,
+                playerUrl: this.editAlbumPlayed.playerLink,
+                date: this.editAlbumPlayed.date
+            });
+
+        this.selectedListeningTime.setValue(this.editAlbumPlayed.date);
+
+    }
+
+    //#endregion
+
+    //#region Page Control Handlers
+
+    public async onUpdateAlbum()
+    {
+        var album = this.getNewAlbumPlayed();
+        album.date = this.selectedListeningTime.value;
+
+        await this.dataModelService.updateAsyncAlbumPlayed(album);
+
+        var resp = AlbumPlayedAddResponse.fromData(this.dataModelService.updateAlbumPlayedResponse);
+    }
+
+
+    public async onDeleteAlbum()
+    {
+        var album = this.getNewAlbumPlayed();
+
+        await this.dataModelService.deleteAsyncAlbumPlayed(album);
+
+        var resp = AlbumPlayedAddResponse.fromData(this.dataModelService.deleteAlbumPlayedResponse);
+    }
+
+    //#endregion
+
+
 
 
 }
