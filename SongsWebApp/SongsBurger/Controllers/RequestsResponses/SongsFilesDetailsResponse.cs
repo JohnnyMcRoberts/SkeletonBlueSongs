@@ -1,7 +1,5 @@
 ﻿namespace SongsBurger.Controllers.RequestsResponses
 {
-    using SongsDatabase.DataModels;
-
     public enum SongsFilesResponseCode
     {
         Success = 0,
@@ -18,14 +16,14 @@
 
         public string FailReason { get; set; }
 
-        public AlbumPlayed[] AlbumsPlayed { get; set; }
+        public DisplayAlbum[] AlbumsPlayed { get; set; }
 
         public SongsFilesDetailsResponse()
         {
             FileName = string.Empty;
             ErrorCode = (int) SongsFilesResponseCode.Success;
             FailReason = string.Empty;
-            AlbumsPlayed = new AlbumPlayed[] { };
+            AlbumsPlayed = new DisplayAlbum[] { };
         }
 
         public SongsFilesDetailsResponse(SongsFilesDetailsResponse request)
@@ -34,10 +32,10 @@
             ErrorCode = request.ErrorCode;
             FailReason = request.FailReason;
 
-            AlbumsPlayed = new AlbumPlayed[request.AlbumsPlayed.Length];
+            AlbumsPlayed = new DisplayAlbum[request.AlbumsPlayed.Length];
             for (int i = 0; i < request.AlbumsPlayed.Length; i++)
             {
-                AlbumsPlayed[i] = new AlbumPlayed(request.AlbumsPlayed[i]);
+                AlbumsPlayed[i] = new DisplayAlbum(request.AlbumsPlayed[i]);
             }
         }
     }

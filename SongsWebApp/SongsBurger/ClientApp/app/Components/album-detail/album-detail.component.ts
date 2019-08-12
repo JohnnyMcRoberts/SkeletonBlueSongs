@@ -49,7 +49,15 @@ export class AlbumDetailComponent implements OnChanges
     public setAlbumPlayed(sheet: AlbumPlayed): void
     {
         this.selectedAlbumPlayed = sheet;
+    }
 
+    //#endregion
+
+    //#region Page Handlers
+
+    public openDisplayLink()
+    {
+        window.open(this.selectedAlbumPlayed.playerLink, "_blank");
     }
 
     //#endregion

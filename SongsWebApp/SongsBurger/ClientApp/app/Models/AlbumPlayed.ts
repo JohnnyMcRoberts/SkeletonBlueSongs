@@ -17,7 +17,7 @@ export class AlbumPlayed implements IAlbumPlayed
     static fromData(data: IAlbumPlayed)
     {
         return new this(
-            data._id,
+            data.id,
             data.date,
             data.location,
             data.artist,
@@ -28,7 +28,7 @@ export class AlbumPlayed implements IAlbumPlayed
     }
 
     constructor(
-        public _id: string = "",
+        public id: string = "",
         public date: Date = new Date(),
         public location: string = "",
         public artist: string = "",
