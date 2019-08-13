@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { DataModelService } from './../../Services/data-model.service';
 import { CurrentLoginService } from './../../Services/current-login.service';
 
-import { AlbumPlayedAddResponse } from './../../Models/AlbumPlayed';
+import { AlbumPlayed, AlbumPlayedAddResponse } from './../../Models/AlbumPlayed';
 
 import { BaseAlbumEdit } from './../base-album-edit.component';
 
@@ -23,7 +23,8 @@ export class AddAlbumComponent extends BaseAlbumEdit implements OnInit, AfterVie
         public dataModelService: DataModelService,
         public currentLoginService: CurrentLoginService)
     {
-        super(formBuilder, dataModelService, currentLoginService );
+        super(formBuilder, dataModelService, currentLoginService);
+        this.newAlbumPlayed = new AlbumPlayed();
     }
 
     //#region BaseAlbumEdit Implementation
