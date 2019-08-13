@@ -54,21 +54,22 @@ export class AlbumsReportComponent
 
         var startDate = new Date(this.startTime.value);
         var endDate = new Date(this.endTime.value);
+        var userId = this.currentLoginService.userId;
 
-        this.dataModelService.fetchSongsReportDetailsData(startDate, endDate).then(() => {
+        this.dataModelService.fetchSongsReportDetailsData(startDate, endDate, userId).then(() =>
+        {
             this.albumsPlayed = this.dataModelService.songsReportDetails;
 
             this.albumsPlayed = new Array<AlbumPlayed>();
-            for (let album of this.dataModelService.songsReportDetails) {
+            for (let album of this.dataModelService.songsReportDetails)
+            {
                 const newAlbum = AlbumPlayed.fromData(album);
 
-                if (newAlbum.userName === this.currentLoginService.name) {
+                if (newAlbum.userName === this.currentLoginService.name)
+                {
                     this.albumsPlayed.push(newAlbum);
                 }
             }
-
-            //this.booksDataSource = new MatTableDataSource(this.books);
-            //this.setupDataTable(this.albumsPlayed);
         });
     }   
 

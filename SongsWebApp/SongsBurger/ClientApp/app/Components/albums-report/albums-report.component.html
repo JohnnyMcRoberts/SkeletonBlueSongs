@@ -53,6 +53,19 @@
 
     <div class="logged-in-div" *ngIf="reportIsGenerated">
         <p>Unique Albums Played</p>
+      <table class="borders-table" *ngIf="albumsPlayed">
+        <tr>
+          <th> Artist </th>
+          <th> Album Name </th>
+          <th> First Played </th>
+        </tr>
+        <tr *ngFor="let album of albumsPlayed" class="borders-tr">
+          <td class="headers-borders-title-td">{{album.artist}}</td>
+          <td class="headers-borders-title-td">{{album.album}}</td>
+          <td class="headers-borders-title-td">{{album.date | date :'fullDate'}}</td>
+        </tr>
+      </table>
+
     </div>
 
 </div>
