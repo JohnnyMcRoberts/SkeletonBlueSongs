@@ -36,7 +36,10 @@ export class SideNavigationListComponent implements OnInit {
         {
             link: "/edit-album", text: "Edit Album Played", icon: "edit"
         },
-
+        {
+            link: "/albums-report", text: "Albums Report", icon: "queue_music"
+        },
+        //albums-report
         {
             link: "/to-do-list", text: "To Do List", icon: "list_alt"
         }
