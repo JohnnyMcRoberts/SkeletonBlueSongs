@@ -131,14 +131,14 @@ export class DataModelService
     }
 
     public songsReportDetails: AlbumPlayed[];
-    fetchSongsReportDetailsData(startDate:Date, endDate:Date)
+    fetchSongsReportDetailsData(startDate:Date, endDate:Date, userId: string)
     {
         var startString = this.dateToIso(startDate);
         var endString = this.dateToIso(endDate);
 
         return this.http.get <AlbumPlayed[]>(
             this.requestUrl + "GetSongsReportDetails"
-            + "/" + startString + "/" + endString)
+            + "/" + startString + "/" + endString + "/" + userId)
             .toPromise().then(result =>
             {
                 this.songsReportDetails = result as AlbumPlayed[];

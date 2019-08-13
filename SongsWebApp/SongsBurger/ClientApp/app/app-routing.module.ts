@@ -13,13 +13,13 @@ const routes: Routes =
 [
     { path: '', component: LoginComponent, pathMatch: 'full' },
 
-    { path: 'to-do-list', component: ToDoListComponent },
-    { path: 'main-tables', component: MainTablesComponent },
-    { path: 'import-export', component: TextFileImportExportComponent },
     { path: 'login', component: LoginComponent },
     { path: 'add-album', component: AddAlbumComponent },
     { path: 'edit-album', component: EditAlbumComponent },
-        { path: 'albums-report', component: AlbumsReportComponent },
+    { path: 'albums-report', component: AlbumsReportComponent },
+    { path: 'to-do-list', component: ToDoListComponent },
+    { path: 'main-tables', component: MainTablesComponent },
+    { path: 'import-export', component: TextFileImportExportComponent },
 ];
 
 @NgModule({

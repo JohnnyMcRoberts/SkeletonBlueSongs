@@ -213,22 +213,38 @@
         }
 
 
-        [HttpGet("[action]/{start}/{end}")]
-        public IEnumerable<DisplayAlbum> GetSongsReportDetails(string start, string end)
+        [HttpGet("[action]/{start}/{end}/{userId}")]
+        public IEnumerable<DisplayAlbum> GetSongsReportDetails(string start, string end, string userId)
         {
             var albums = new ObservableCollection<DisplayAlbum>();
 
             var startTime = BuildDateTimeFromYAFormat(start);
             var endTime = BuildDateTimeFromYAFormat(end);
 
+            User foundUser = _userDatabase.LoadedItems.FirstOrDefault(x => x.Id.ToString() == userId);
+            if (foundUser == null)
+            {
+                return albums;
+            }
+
+
             lock (Lock)
             {
                 var matchedAlbums =
                     _albumPlayedDatabase.LoadedItems.Where(
-                        x => x.Date <= endTime && x.Date >= startTime);
-                foreach (var albumPlayed in matchedAlbums)
+                        x => x.UserName == foundUser.Name && x.Date <= endTime && x.Date >= startTime);
+
+                Dictionary<string, AlbumPlayed> albumsDictionary = new Dictionary<string, AlbumPlayed>();
+                foreach (var album in matchedAlbums)
                 {
-                    albums.Add(new DisplayAlbum(albumPlayed));
+                    var namesPair = album.Artist + " " + album.Album;
+                    if (!albumsDictionary.ContainsKey(namesPair))
+                        albumsDictionary.Add(namesPair, album);
+                }
+
+                foreach (var key in albumsDictionary.Keys.OrderBy(x => x))
+                {
+                    albums.Add(new DisplayAlbum(albumsDictionary[key]));
                 }
             }
             
@@ -264,11 +280,6 @@
             return details;
         }
 
-        /// <summary>
-        /// Adds a new user login.
-        /// </summary>
-        /// <param name="addAlbumRequest">The new album played item to try to add.</param>
-        /// <returns>The action result.</returns>
         [HttpPost]
         public IActionResult Post([FromBody] DisplayAlbum addAlbumRequest)
         {
