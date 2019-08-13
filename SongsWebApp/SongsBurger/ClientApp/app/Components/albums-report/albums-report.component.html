@@ -1,0 +1,58 @@
+﻿<div *ngIf="!currentLoginService.isLoggedIn" class="not-logged-in-div">
+    <h1>Not currently Logged In</h1>
+</div>
+<div class="logged-in-div" *ngIf="currentLoginService.isLoggedIn">
+    <div class="logged-in-div">
+        <table>
+            <tr>
+                <td>
+                    <div>
+                        <label>Start Time:</label>
+                        <input [formControl]="startTime"
+                               [owlDateTimeTrigger]="dtStartPicker"
+                               [owlDateTime]="dtStartPicker">
+                        <owl-date-time #dtStartPicker></owl-date-time>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <label>End Time:</label>
+                        <input [formControl]="endTime"
+                               [owlDateTimeTrigger]="dtEndPicker"
+                               [owlDateTime]="dtEndPicker">
+                        <owl-date-time #dtEndPicker></owl-date-time>
+                    </div>
+                </td>
+                <td>
+                    <button mat-raised-button
+                            color="primary"
+                            (click)="onGenerateReport()">
+                        Generate Report
+                    </button>
+                </td>
+                <td>
+                    <button mat-raised-button
+                            color="primary"
+                            [disabled]="!reportIsGenerated"
+                            (click)="onExportToFile()">
+                        Export To File
+                    </button>
+                </td>
+                <td>
+                    <button mat-raised-button
+                            color="primary"
+                            [disabled]="!reportIsGenerated"
+                            (click)="onReset()">
+                        Reset
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+    <div class="logged-in-div" *ngIf="reportIsGenerated">
+        <p>Unique Albums Played</p>
+    </div>
+
+</div>

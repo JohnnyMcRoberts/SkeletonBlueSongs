@@ -3,8 +3,10 @@
     using System;
     using System.Collections.ObjectModel;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
-
+    using System.Text.RegularExpressions;
+    
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
 
@@ -58,6 +60,26 @@
         {
             if (!stringLookup.ContainsKey(location))
                 stringLookup.Add(location, location);
+        }
+
+
+        /// <summary>
+        /// Convert a UTC Date String of format yyyyMMddThhmmZ into a Local Date
+        /// </summary>
+        /// <param name="dateString"></param>
+        /// <returns></returns>
+        private DateTime BuildDateTimeFromYAFormat(string dateString)
+        {
+            Regex r = new Regex(@"^\d{4}\d{2}\d{2}T\d{2}\d{2}Z$");
+            if (!r.IsMatch(dateString))
+            {
+                throw new FormatException(
+                    string.Format("{0} is not the correct format. Should be yyyyMMddThhmmZ", dateString));
+            }
+
+            DateTime dt = DateTime.ParseExact(dateString, "yyyyMMddThhmmZ", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+
+            return dt;
         }
 
         #endregion
@@ -190,6 +212,29 @@
             return resp;
         }
 
+
+        [HttpGet("[action]/{start}/{end}")]
+        public IEnumerable<DisplayAlbum> GetSongsReportDetails(string start, string end)
+        {
+            var albums = new ObservableCollection<DisplayAlbum>();
+
+            var startTime = BuildDateTimeFromYAFormat(start);
+            var endTime = BuildDateTimeFromYAFormat(end);
+
+            lock (Lock)
+            {
+                var matchedAlbums =
+                    _albumPlayedDatabase.LoadedItems.Where(
+                        x => x.Date <= endTime && x.Date >= startTime);
+                foreach (var albumPlayed in matchedAlbums)
+                {
+                    albums.Add(new DisplayAlbum(albumPlayed));
+                }
+            }
+            
+            return albums;
+        }
+
         [HttpGet("[action]")]
         [ProducesResponseType(201, Type = typeof(SongsValuesDetails))]
         public SongsValuesDetails GetSongsValuesDetails()
@@ -257,9 +302,7 @@
 
             return Ok(response);
         }
-
-
-        // PUT api/values/5
+        
         [HttpPut]
         public IActionResult UpdateAlbum([FromBody] DisplayAlbum existingAlbum)
         {
@@ -299,7 +342,6 @@
             return Ok(response);
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {

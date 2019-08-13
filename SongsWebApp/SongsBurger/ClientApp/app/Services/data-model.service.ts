@@ -107,4 +107,42 @@ export class DataModelService
 
         console.log('No issues, waiting until promise is resolved...');
     }
+
+
+    private pad(number)
+    {
+        if (number < 10)
+        {
+            return '0' + number;
+        }
+
+        return number;
+    }
+
+    private dateToIso(date: Date): string
+    {
+        return date.getUTCFullYear() +
+            this.pad(date.getUTCMonth() + 1) +
+            this.pad(date.getUTCDate()) +
+            'T' +
+            this.pad(date.getUTCHours()) +
+            this.pad(date.getUTCMinutes()) +
+            'Z';
+    }
+
+    public songsReportDetails: AlbumPlayed[];
+    fetchSongsReportDetailsData(startDate:Date, endDate:Date)
+    {
+        var startString = this.dateToIso(startDate);
+        var endString = this.dateToIso(endDate);
+
+        return this.http.get <AlbumPlayed[]>(
+            this.requestUrl + "GetSongsReportDetails"
+            + "/" + startString + "/" + endString)
+            .toPromise().then(result =>
+            {
+                this.songsReportDetails = result as AlbumPlayed[];
+            },
+                error => console.error(error));
+    }
 }
