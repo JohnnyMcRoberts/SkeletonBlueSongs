@@ -13,6 +13,12 @@
         public const string TestFileNameSingleAlbum = "SingleAlbum.txt";
         public const string TestFileNameSingleDay = "SingleDay.txt";
 
+        public const string TestFileNameAllDaysCsv = "AllSongsToDate.csv";
+        public const string TestFileNameSingleDayCsv = "SingleDay.csv";
+
+        public const string TestFileNameAllDaysJson = "AllSongsToDate.json";
+        public const string TestFileNameSingleDayJson = "SingleDay.json";
+
         #endregion
 
         public static string GetPathToFile(string filename)

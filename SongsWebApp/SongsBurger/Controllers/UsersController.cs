@@ -17,15 +17,11 @@
     {
         #region Private Data
 
-        private readonly MongoDbSettings _dbConfig;
         private readonly UserDatabase _userDatabase;
-        private readonly AlbumPlayedDatabase _albumPlayedDatabase;
 
         #endregion
 
         #region Initialisation
-
-        private static readonly object Lock = new object();
 
         #endregion
 
@@ -79,9 +75,8 @@
 
         public UsersController(IOptions<MongoDbSettings> dbConfig)
         {
-            _dbConfig = dbConfig.Value;
-            _userDatabase = new UserDatabase(_dbConfig.ConnectionString);
-            _albumPlayedDatabase = new AlbumPlayedDatabase(_dbConfig.ConnectionString);
+            MongoDbSettings mongoDbSettings = dbConfig.Value;
+            _userDatabase = new UserDatabase(mongoDbSettings.ConnectionString);
         }
 
         #endregion

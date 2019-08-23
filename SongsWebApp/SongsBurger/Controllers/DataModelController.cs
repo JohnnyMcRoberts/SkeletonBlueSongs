@@ -14,6 +14,7 @@
     using SongsDatabase.DataModels;
 
     using SongsFileImportExport.Parser;
+    using SongsFileImportExport.Exporter;
 
     using RequestsResponses;
     using Settings;
@@ -25,7 +26,6 @@
     {
         #region Private Data
 
-        private readonly MongoDbSettings _dbConfig;
         private readonly FileUploadSettings _uploaderSettings;
         private readonly AlbumPlayedDatabase _albumPlayedDatabase;
         private readonly UserDatabase _userDatabase;
@@ -93,7 +93,7 @@
 
             lock (Lock)
             {
-                foreach (var albumPlayed in _albumPlayedDatabase.LoadedItems)
+                foreach (var albumPlayed in _albumPlayedDatabase.LoadedItems.OrderBy(x => x.Date))
                 {
                     albums.Add(new DisplayAlbum(albumPlayed));
                 }
@@ -131,7 +131,14 @@
 
             if (System.IO.File.Exists(fullPath))
             {
-                var albums = SongFileParser.GetAlbumsPlayedFromFile(fullPath);
+                List<AlbumPlayed> albums = new List<AlbumPlayed>();
+
+                if (fullPath.ToLower().EndsWith(".txt"))
+                    albums = SongFileParser.GetAlbumsPlayedFromFile(fullPath);
+                else if (fullPath.ToLower().EndsWith(".csv"))
+                    albums = SongFileParserCsv.GetAlbumsPlayedFromFile(fullPath);
+                else if (fullPath.ToLower().EndsWith(".json"))
+                    albums = SongFileParserJson.GetAlbumsPlayedFromFile(fullPath);
 
                 if (albums == null || !albums.Any())
                 {
@@ -188,7 +195,7 @@
                     // Add the albums read from file with this user name
                     lock (Lock)
                     {
-                        foreach (var fileAlbum in resp.AlbumsPlayed)
+                        foreach (var fileAlbum in resp.AlbumsPlayed.OrderBy(x => x.Date))
                         {
                             _albumPlayedDatabase.AddNewItemToDatabase(
                                 new AlbumPlayed
@@ -231,8 +238,10 @@
             lock (Lock)
             {
                 var matchedAlbums =
-                    _albumPlayedDatabase.LoadedItems.Where(
-                        x => x.UserName == foundUser.Name && x.Date <= endTime && x.Date >= startTime);
+                    _albumPlayedDatabase.LoadedItems
+                        .Where(x => x.UserName == foundUser.Name && x.Date <= endTime && x.Date >= startTime)
+                        .OrderBy(x => x.Date);
+
 
                 Dictionary<string, AlbumPlayed> albumsDictionary = new Dictionary<string, AlbumPlayed>();
                 foreach (var album in matchedAlbums)
@@ -278,6 +287,32 @@
             };
 
             return details;
+        }
+
+        [HttpGet("[action]/{userId}")]
+        [ProducesResponseType(201, Type = typeof(ExportText))]
+        public ExportText GetExportText(string userId)
+        {
+            ExportText exportText = new ExportText { Format = "text/plain" };
+
+            User foundUser = _userDatabase.LoadedItems.FirstOrDefault(x => x.Id.ToString() == userId);
+            if (foundUser == null)
+            {
+                return exportText;
+            }
+
+            lock (Lock)
+            {
+                List<AlbumPlayed> albums = 
+                    _albumPlayedDatabase.LoadedItems
+                        .Where(x => x.UserName == foundUser.Name)
+                        .OrderBy(x => x.Date).ToList();
+                AlbumsPlayedExporter.ExportToFile(albums, out var formattedText);
+
+                exportText.FormattedText = formattedText;
+            }
+            
+            return exportText;
         }
 
         [HttpPost]
@@ -352,6 +387,57 @@
 
             return Ok(response);
         }
+        
+        [HttpPut]
+        public IActionResult UpdateAlbum([FromBody] DisplayAlbum existingAlbum)
+        {
+            // set up the successful response
+            AlbumPlayedAddResponse response = new AlbumPlayedAddResponse
+            {
+                ErrorCode = (int)UserResponseCode.Success,
+                Album = new DisplayAlbum(existingAlbum),
+                FailReason = "",
+                UserId = ""
+            };
+
+            // Find the item
+            lock (Lock)
+            {
+                var itemToUpdate =
+                    _albumPlayedDatabase.LoadedItems.FirstOrDefault(x => x.Id.ToString() == existingAlbum.Id);
+
+                if (itemToUpdate == null)
+                {
+                    response.ErrorCode = (int)UserResponseCode.UnknownItem;
+                    response.FailReason = "Could not find item";
+                }
+                else
+                {
+                    itemToUpdate.Date = existingAlbum.Date;
+                    itemToUpdate.Location = existingAlbum.Location;
+                    itemToUpdate.Artist = existingAlbum.Artist;
+                    itemToUpdate.Album = existingAlbum.Album;
+                    itemToUpdate.ImagePath = existingAlbum.ImagePath;
+                    itemToUpdate.PlayerLink = existingAlbum.PlayerLink;
+
+                    _albumPlayedDatabase.UpdateDatabaseItem(itemToUpdate);
+                }
+            }
+
+            return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(string id)
+        {
+            // set up the successful response
+            AlbumPlayedAddResponse response = new AlbumPlayedAddResponse
+            {
+                ErrorCode = (int)UserResponseCode.Success,
+                Album = new DisplayAlbum(),
+                FailReason = "",
+                UserId = ""
+            };
 
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
@@ -401,11 +487,11 @@
             IOptions<FileUploadSettings> uploaderConfig,
             IOptions<MongoDbSettings> dbConfig)
         {
-            _dbConfig = dbConfig.Value;
+            var dbConfig1 = dbConfig.Value;
             _uploaderSettings = uploaderConfig.Value;
 
-            _albumPlayedDatabase = new AlbumPlayedDatabase(_dbConfig.ConnectionString);
-            _userDatabase = new UserDatabase(_dbConfig.ConnectionString);
+            _albumPlayedDatabase = new AlbumPlayedDatabase(dbConfig1.ConnectionString);
+            _userDatabase = new UserDatabase(dbConfig1.ConnectionString);
         }
 
         #endregion

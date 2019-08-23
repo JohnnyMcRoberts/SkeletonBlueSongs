@@ -48,15 +48,20 @@ export class ToDoListComponent
         {
             name: 'Complete the Update and delete functionality',
             updated: new Date('12/08/19'),
+        },
+        {
+            name: 'Add a report page',
+            updated: new Date('13/08/19'),
+        },
+        {
+            name: 'Include the import/export for a few formats',
+            updated: new Date('23/08/19'),
+
         }
     ];
 
     public toDoItems: ISection[] =
     [
-        {
-            name: 'Add a report page',
-            updated: new Date('13/08/19'),
-        }
     ];
 
 }

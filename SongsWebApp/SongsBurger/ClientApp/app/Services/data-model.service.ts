@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { AlbumPlayed, AlbumPlayedAddResponse } from './../Models/AlbumPlayed';
 
-
 import { SongsValuesDetails, SongsFilesDetailsResponse } from './../Models/SongsFilesDetails';
+import { ExportText } from './../Models/ExportText';
 
 const httpOptions =
 {
@@ -70,6 +70,17 @@ export class DataModelService
             .toPromise().then(result =>
                 {
                     this.songsValuesDetails = result as SongsValuesDetails;
+                },
+                error => console.error(error));
+    }
+
+    public exportText: ExportText;
+    fetchExportTextData(userId: string)
+    {
+        return this.http.get<ExportText>(this.requestUrl + "GetExportText/" + userId)
+            .toPromise().then(result =>
+                {
+                    this.exportText = result as ExportText;
                 },
                 error => console.error(error));
     }
