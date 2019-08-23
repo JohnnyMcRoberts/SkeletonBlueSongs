@@ -242,6 +242,7 @@
                         .Where(x => x.UserName == foundUser.Name && x.Date <= endTime && x.Date >= startTime)
                         .OrderBy(x => x.Date);
 
+
                 Dictionary<string, AlbumPlayed> albumsDictionary = new Dictionary<string, AlbumPlayed>();
                 foreach (var album in matchedAlbums)
                 {
@@ -386,6 +387,57 @@
 
             return Ok(response);
         }
+        
+        [HttpPut]
+        public IActionResult UpdateAlbum([FromBody] DisplayAlbum existingAlbum)
+        {
+            // set up the successful response
+            AlbumPlayedAddResponse response = new AlbumPlayedAddResponse
+            {
+                ErrorCode = (int)UserResponseCode.Success,
+                Album = new DisplayAlbum(existingAlbum),
+                FailReason = "",
+                UserId = ""
+            };
+
+            // Find the item
+            lock (Lock)
+            {
+                var itemToUpdate =
+                    _albumPlayedDatabase.LoadedItems.FirstOrDefault(x => x.Id.ToString() == existingAlbum.Id);
+
+                if (itemToUpdate == null)
+                {
+                    response.ErrorCode = (int)UserResponseCode.UnknownItem;
+                    response.FailReason = "Could not find item";
+                }
+                else
+                {
+                    itemToUpdate.Date = existingAlbum.Date;
+                    itemToUpdate.Location = existingAlbum.Location;
+                    itemToUpdate.Artist = existingAlbum.Artist;
+                    itemToUpdate.Album = existingAlbum.Album;
+                    itemToUpdate.ImagePath = existingAlbum.ImagePath;
+                    itemToUpdate.PlayerLink = existingAlbum.PlayerLink;
+
+                    _albumPlayedDatabase.UpdateDatabaseItem(itemToUpdate);
+                }
+            }
+
+            return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(string id)
+        {
+            // set up the successful response
+            AlbumPlayedAddResponse response = new AlbumPlayedAddResponse
+            {
+                ErrorCode = (int)UserResponseCode.Success,
+                Album = new DisplayAlbum(),
+                FailReason = "",
+                UserId = ""
+            };
 
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
