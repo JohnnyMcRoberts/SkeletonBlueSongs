@@ -306,45 +306,6 @@
                         .Where(x => x.UserName == foundUser.Name && x.Date <= endTime && x.Date >= startTime)
                         .OrderBy(x => x.Date);
 
-                Dictionary<string, AlbumPlayed> albumsDictionary = new Dictionary<string, AlbumPlayed>();
-                foreach (var album in matchedAlbums)
-                {
-                    var namesPair = album.Artist + " " + album.Album;
-                    if (!albumsDictionary.ContainsKey(namesPair))
-                        albumsDictionary.Add(namesPair, album);
-                }
-
-                foreach (var key in albumsDictionary.Keys.OrderBy(x => x))
-                {
-                    albums.Add(new DisplayAlbum(albumsDictionary[key]));
-                }
-            }
-            
-            return albums;
-        }
-
-        [HttpGet("[action]/{start}/{end}/{userId}")]
-        public IEnumerable<DisplayAlbum> GetSongsReportDetails(string start, string end, string userId)
-        {
-            var albums = new ObservableCollection<DisplayAlbum>();
-
-            var startTime = BuildDateTimeFromYAFormat(start);
-            var endTime = BuildDateTimeFromYAFormat(end);
-
-            User foundUser = _userDatabase.LoadedItems.FirstOrDefault(x => x.Id.ToString() == userId);
-            if (foundUser == null)
-            {
-                return albums;
-            }
-
-
-            lock (Lock)
-            {
-                var matchedAlbums =
-                    _albumPlayedDatabase.LoadedItems
-                        .Where(x => x.UserName == foundUser.Name && x.Date <= endTime && x.Date >= startTime)
-                        .OrderBy(x => x.Date);
-
 
                 Dictionary<string, AlbumPlayed> albumsDictionary = new Dictionary<string, AlbumPlayed>();
                 foreach (var album in matchedAlbums)

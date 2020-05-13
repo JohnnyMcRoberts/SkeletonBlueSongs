@@ -6,23 +6,24 @@
       
       <h2> Successfully Logged In </h2>
 
-      <table>
-        <tr>
-          <td>User: </td>
-          <td>{{currentLoginService.name}}</td>
-        </tr>
+        <table>
 
-        <tr>
-          <td>E-Mail: </td>
-          <td>{{currentLoginService.email}}</td>
-        </tr>
+            <tr>
+                <td>User: </td>
+                <td>{{currentLoginService.name}}</td>
+            </tr>
 
-        <tr>
-          <td>Description: </td>
-          <td>{{currentLoginService.description}}</td>
-        </tr>
+            <tr>
+                <td>E-Mail: </td>
+                <td>{{currentLoginService.email}}</td>
+            </tr>
 
-      </table>
+            <tr>
+                <td>Description: </td>
+                <td>{{currentLoginService.description}}</td>
+            </tr>
+
+        </table>
       
       <button mat-raised-button (click)="onExistingUserReset()">
         Reset

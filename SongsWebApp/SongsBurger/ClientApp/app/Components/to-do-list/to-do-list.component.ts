@@ -62,6 +62,10 @@ export class ToDoListComponent
 
     public toDoItems: ISection[] =
     [
+        {
+            name: 'Integrate Album artwork search',
+            updated: new Date('14/05/20'),
+        }
     ];
 
 }
