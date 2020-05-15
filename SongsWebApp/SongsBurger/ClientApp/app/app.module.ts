@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { FileSelectDirective } from 'ng2-file-upload';
 
 import { ToDoListComponent } from './Components/to-do-list/to-do-list.component';
+import { FindDetailsComponent } from './Components/find-details/find-details.component';
 import { TextFileImportExportComponent } from './Components/text-file-import-export/text-file-import-export.component';
 import { LoginComponent } from './Components/login/login.component';
 import { AddAlbumComponent } from './Components/add-album/add-album.component';
@@ -28,6 +29,7 @@ import { CurrentLoginService } from './Services/current-login.service';
 import { LoginService } from './Services/login.service';
 import { FileUploadService } from './Services/file-upload.service';
 import { SongsFilesDetailsService } from './Services/songs-files-details.service';
+import { LastFmArtistService } from './Services/last-fm-artist.service';
 
 //#endregion
 
@@ -105,6 +107,7 @@ import {
         EditAlbumComponent,
         AlbumDetailComponent,
         AlbumsReportComponent,
+        FindDetailsComponent,
 
         MainTablesComponent,
         AlbumPlayedTableComponent,
@@ -173,7 +176,8 @@ import {
         LoginService,
         CurrentLoginService,
         FileUploadService,
-        SongsFilesDetailsService
+        SongsFilesDetailsService,
+        LastFmArtistService
     ],
     bootstrap: [AppComponent]
 })

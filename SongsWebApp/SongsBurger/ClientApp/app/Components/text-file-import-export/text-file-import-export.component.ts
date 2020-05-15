@@ -76,6 +76,8 @@ export class TextFileImportExportComponent
 
     //#endregion
 
+    //#endregion
+
     //#region File Upload helper methods
 
     public uploader: FileUploader;
@@ -192,6 +194,23 @@ export class TextFileImportExportComponent
         }
     }
 
+    public async addFileUpdateSongsForUser(fileInfo: any, userId: string)
+    {
+        const file: File = fileInfo._file;
+
+        console.log(file.name);
+
+        if (this.uploadFileNameByGuid.has(file.name))
+        {
+            var fileNameGuid = this.uploadFileNameByGuid.get(file.name);
+
+            this.dataModelService.getAllAlbumsPlayedFromFileUpdatesToUser(fileNameGuid, userId).then(() =>
+            {
+                this.updateSelectedSongDetails(this.dataModelService.allAlbumsPlayedFromFileUpdatesToUser);
+            });
+        }
+    }
+
     //#endregion
 
     //#region Page Control Handlers
@@ -231,6 +250,11 @@ export class TextFileImportExportComponent
     public async onFileSetForUser()
     {
         await this.setFileSongsForUser(this.fileInfoLatest, this.currentLoginService.userId);
+    }
+
+    public async onFileAddUpdatesForUser()
+    {
+        await this.addFileUpdateSongsForUser(this.fileInfoLatest, this.currentLoginService.userId);
     }
 
     public async onDisplayExportData()

@@ -2,6 +2,7 @@
 import { RouterModule, Routes } from '@angular/router';
 
 import { ToDoListComponent } from './Components/to-do-list/to-do-list.component';
+import { FindDetailsComponent } from './Components/find-details/find-details.component';
 import { LoginComponent } from './Components/login/login.component';
 import { AddAlbumComponent } from './Components/add-album/add-album.component';
 import { AlbumsReportComponent } from './Components/albums-report/albums-report.component';
@@ -20,6 +21,7 @@ const routes: Routes =
     { path: 'to-do-list', component: ToDoListComponent },
     { path: 'main-tables', component: MainTablesComponent },
     { path: 'import-export', component: TextFileImportExportComponent },
+    { path: 'find-details', component: FindDetailsComponent }
 ];
 
 @NgModule({

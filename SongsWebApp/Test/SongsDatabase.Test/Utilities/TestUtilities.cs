@@ -5,7 +5,6 @@
     using System.Configuration;
     using System.IO;
 
-
     public static class TestUtilities
     {
         public static Dictionary<string, string> GetSettingsLookup()

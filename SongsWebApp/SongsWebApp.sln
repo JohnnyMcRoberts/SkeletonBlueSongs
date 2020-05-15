@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.757
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SongsBurger", "SongsBurger\SongsBurger.csproj", "{930361B6-20C1-4A1F-847A-1DAB0B50030E}"
 EndProject
@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SongsDatabase.Test", "Test\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SongsBurger.Test", "Test\SongsBurger.Test\SongsBurger.Test.csproj", "{5C142140-0E50-4520-851F-87759D1B236C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SongsFileImportExport", "SongsFileImportExport\SongsFileImportExport.csproj", "{26B9A3EB-871E-4299-AB18-79328CF33468}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SongsFileImportExport", "SongsFileImportExport\SongsFileImportExport.csproj", "{26B9A3EB-871E-4299-AB18-79328CF33468}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SongsFileImportExport.Test", "Test\SongsFileImportExport.Test\SongsFileImportExport.Test.csproj", "{484BF3F5-4F61-41A1-B050-8E921A216740}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SongsFileImportExport.Test", "Test\SongsFileImportExport.Test\SongsFileImportExport.Test.csproj", "{484BF3F5-4F61-41A1-B050-8E921A216740}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

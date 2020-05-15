@@ -87,3 +87,12 @@ table td, table td *
 .analysis-button {
     margin: 5px;
 }
+:host ::ng-deep .mat-tab-body-wrapper
+{
+    height: 600px;
+}
+
+:host ::ng-deep .mat-tab-body.mat-tab-body-active 
+{
+    height: 600px;
+}

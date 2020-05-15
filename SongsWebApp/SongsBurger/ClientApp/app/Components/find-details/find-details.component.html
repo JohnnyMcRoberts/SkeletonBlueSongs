@@ -1,0 +1,53 @@
+﻿<div style="padding: 15px;">
+    <table width="100%">
+        <tr>
+            <td style="min-width: 250px;">
+                <input class="input" 
+                       type="text" 
+                       name="searchArtistStr" 
+                       [(ngModel)]="searchArtistStr" 
+                       placeholder="Artist"  
+                       (keyup.enter)="onSearchForArtistAlbum()">
+            </td>
+            <td style="min-width: 250px;">
+                <input class="input" 
+                       type="text" 
+                       name="searchAlbumStr" 
+                       [(ngModel)]="searchAlbumStr" 
+                       placeholder="Album"  
+                       (keyup.enter)="onSearchForArtistAlbum()">
+            </td>
+            <td width="100%"></td>
+            <td style="padding: 5px;">
+                <button mat-raised-button
+                        color="primary"
+                        (click)="onSearchForArtistAlbum()" i18n>
+                    Search For Album
+                </button>
+            </td>
+
+        </tr>
+    </table>
+</div>
+
+
+<div class="fadein" *ngIf="searchResult" style="padding: 15px;">
+
+    <!-- Display Artist -->
+    <div class="box">
+        <article class="media">
+            <div class="content">
+                <a class="has-text-info" href="{{ searchArtist.url }}" target="_blank"><strong>{{ searchArtist.name }}</strong></a>
+                <br>
+                <a class="has-text-info" href="{{ searchAlbum.url }}" target="_blank"><strong>{{ searchAlbum.name }}</strong></a>
+                <br>
+                <div innerHTML="{{ searchAlbum.summary }}"></div>
+            </div>
+            <div class="media-left">
+                <figure class="image is-128x128">
+                    <a href="{{ searchAlbum.url }}" target="_blank"><img src="{{ searchAlbum.image }}" alt="artistImage"></a>
+                </figure>
+            </div>
+        </article>
+    </div>
+</div>

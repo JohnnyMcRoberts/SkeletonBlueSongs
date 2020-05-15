@@ -34,11 +34,19 @@
                 </button>
               </td>
               <td>
+                  <button mat-raised-button 
+                          [disabled]="!fileIsUploaded"
+                          (click)="onFileSetForUser()">
+                      Set For User
+                  </button>
+              </td>
+              <td>
                 <button mat-raised-button 
                         [disabled]="!fileIsUploaded"
-                        (click)="onFileSetForUser()">
-                  Set For User
-                </button></td>
+                        (click)="onFileAddUpdatesForUser()">
+                    Add Updates For User
+                </button>
+              </td>
             </tr>
           </table>
 
