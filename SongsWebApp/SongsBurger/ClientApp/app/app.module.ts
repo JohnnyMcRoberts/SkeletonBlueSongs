@@ -11,6 +11,7 @@ import { AddAlbumComponent } from './Components/add-album/add-album.component';
 import { EditAlbumComponent } from './Components/edit-album/edit-album.component';
 import { AlbumDetailComponent } from './Components/album-detail/album-detail.component';
 import { AlbumsReportComponent } from './Components/albums-report/albums-report.component';
+import { SearchDetailComponent } from './Components/search-detail/search-detail.component';
 
 import { MainTablesComponent } from './Components/Tables/main-tables/main-tables.component';
 import { AlbumPlayedTableComponent } from './Components/Tables/album-played-table/album-played-table.component';
@@ -108,6 +109,7 @@ import {
         AlbumDetailComponent,
         AlbumsReportComponent,
         FindDetailsComponent,
+        SearchDetailComponent,
 
         MainTablesComponent,
         AlbumPlayedTableComponent,

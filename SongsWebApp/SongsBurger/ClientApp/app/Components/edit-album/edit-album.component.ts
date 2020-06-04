@@ -2,11 +2,15 @@
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
+// Services
 import { DataModelService } from './../../Services/data-model.service';
 import { CurrentLoginService } from './../../Services/current-login.service';
 
+// Models
 import { AlbumPlayed, AlbumPlayedAddResponse } from './../../Models/AlbumPlayed';
 
+// Components
+import { SearchDetailComponent } from './../search-detail/search-detail.component';
 import { BaseAlbumEdit } from './../base-album-edit.component';
 
 @Component({
@@ -176,27 +180,39 @@ export class EditAlbumComponent extends BaseAlbumEdit  implements OnInit, AfterV
 
     public async onUpdateAlbum()
     {
-        var album = this.getNewAlbumPlayed();
+        const album = this.getNewAlbumPlayed();
         album.date = this.selectedListeningTime.value;
 
         await this.dataModelService.updateAsyncAlbumPlayed(album);
-
-        var resp = AlbumPlayedAddResponse.fromData(this.dataModelService.updateAlbumPlayedResponse);
+        
+        AlbumPlayedAddResponse.fromData(this.dataModelService.updateAlbumPlayedResponse);
     }
-
 
     public async onDeleteAlbum()
     {
-        var album = this.getNewAlbumPlayed();
+        const album = this.getNewAlbumPlayed();
 
         await this.dataModelService.deleteAsyncAlbumPlayed(album);
 
-        var resp = AlbumPlayedAddResponse.fromData(this.dataModelService.deleteAlbumPlayedResponse);
+        AlbumPlayedAddResponse.fromData(this.dataModelService.deleteAlbumPlayedResponse);
+    }
+
+    public onFindAlbumDetails(): void 
+    {
+        this.searchAlbum = this.getNewAlbumPlayed();
+        this.newAlbumDetailsToSearch = true;
+        console.log("onFindAlbumDetails -> about to display");
     }
 
     //#endregion
 
+    //#region Find Details properties
 
+    @ViewChild('searchDetail') searchDetail: SearchDetailComponent;
 
+    newAlbumDetailsToSearch: boolean = false;
+    searchAlbum: AlbumPlayed = new AlbumPlayed();
+
+    //#endregion
 
 }

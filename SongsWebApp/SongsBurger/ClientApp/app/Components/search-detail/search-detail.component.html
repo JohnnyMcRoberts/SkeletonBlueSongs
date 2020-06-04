@@ -1,0 +1,38 @@
+﻿<mat-card class="example-card">
+    <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>{{selectedAlbumPlayed.artist}}</mat-card-title>
+        <mat-card-subtitle>{{selectedAlbumPlayed.album}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="fadein" *ngIf="searchResult" style="padding: 15px;">
+
+            <!-- Display Artist and Album details-->
+            <div class="box">
+                <article class="media">
+                    <div class="content">
+                        <a class="has-text-info" href="{{ searchArtist.url }}" target="_blank"><strong>{{ searchArtist.name }}</strong></a>
+                        <br>
+                        <a class="has-text-info" href="{{ searchAlbum.url }}" target="_blank"><strong>{{ searchAlbum.name }}</strong></a>
+                        <br>
+                        <div innerHTML="{{ searchAlbum.summary }}"></div>
+
+                    </div>
+                    <div class="media-left">
+                        <figure class="image is-128x128">
+                            <a href="{{ searchAlbum.url }}" target="_blank"><img src="{{ searchAlbum.image }}" alt="artistImage"></a>
+                        </figure>
+                    </div>
+                </article>
+            </div>
+            
+            <!-- Display Album artwork location -->
+            <div width="100%">
+                <mat-form-field appearance="fill"  style="width: 100%">
+                    <mat-label>Image Url</mat-label>
+                    <input matInput value="{{ searchAlbum.image }}" readonly>
+                </mat-form-field>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
