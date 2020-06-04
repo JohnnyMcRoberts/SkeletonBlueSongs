@@ -42,6 +42,13 @@
                 <a class="has-text-info" href="{{ searchAlbum.url }}" target="_blank"><strong>{{ searchAlbum.name }}</strong></a>
                 <br>
                 <div innerHTML="{{ searchAlbum.summary }}"></div>
+
+                <div>
+                    <mat-form-field appearance="fill" class="example-full-width">
+                        <mat-label>Image Url</mat-label>
+                        <input matInput value="{{ searchAlbum.image }}" readonly>
+                    </mat-form-field>
+                </div>
             </div>
             <div class="media-left">
                 <figure class="image is-128x128">

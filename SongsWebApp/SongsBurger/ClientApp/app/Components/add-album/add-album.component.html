@@ -5,213 +5,244 @@
 <div *ngIf="currentLoginService.isLoggedIn" style="margin: 15px">
   
   <p>Add new album listened to:</p>
-  
-  <form [formGroup]="addAlbumGroup" class="example-form">
 
-    <div>
+  <table width="100%">
+      <tr>
+          <td width="50%">
 
-      <table>
+              <form [formGroup]="addAlbumGroup" class="example-form">
 
-        <tr>
+                  <div>
 
-          <td>
+                      <table>
 
-            <div>
+                          <tr>
 
-              <!-- Location -->
+                              <td>
 
-              <mat-form-field class="example-full-width">
+                                  <div>
 
-                <input type="text"
-                       placeholder="Location" aria-label="Location"
-                       matInput
-                       formControlName="location"
-                       (change)="locationForm.valueChanged($event)"
-                       [matAutocomplete]="autoLocation"
-                       required>
+                                      <!-- Location -->
 
-                <mat-autocomplete #autoLocation="matAutocomplete"
-                                  (optionSelected)="locationForm.valueChanged($event)">
+                                      <mat-form-field class="example-full-width">
 
-                  <mat-option *ngFor="let option of locationForm.filteredValues | async" [value]="option">
-                    {{option}}
-                  </mat-option>
-                </mat-autocomplete>
+                                          <input type="text"
+                                                 placeholder="Location" aria-label="Location"
+                                                 matInput
+                                                 formControlName="location"
+                                                 (change)="locationForm.valueChanged($event)"
+                                                 [matAutocomplete]="autoLocation"
+                                                 required>
 
-              </mat-form-field>
+                                          <mat-autocomplete #autoLocation="matAutocomplete"
+                                                            (optionSelected)="locationForm.valueChanged($event)">
 
-            </div>
+                                              <mat-option *ngFor="let option of locationForm.filteredValues | async" [value]="option">
+                                                  {{option}}
+                                              </mat-option>
+                                          </mat-autocomplete>
 
+                                      </mat-form-field>
+
+                                  </div>
+
+                              </td>
+
+                          </tr>
+
+                          <tr>
+
+                              <td>
+
+                                  <div>
+
+                                      <!-- Artist -->
+
+                                      <mat-form-field class="example-full-width">
+
+                                          <input type="text"
+                                                 placeholder="Artist" aria-label="Artist"
+                                                 matInput
+                                                 formControlName="artist"
+                                                 (change)="artistForm.valueChanged($event)"
+                                                 [matAutocomplete]="autoArtist"
+                                                 required>
+
+                                          <mat-autocomplete #autoArtist="matAutocomplete"
+                                                            (optionSelected)="artistForm.valueChanged($event)">
+
+                                              <mat-option *ngFor="let option of artistForm.filteredValues | async" [value]="option">
+                                                  {{option}}
+                                              </mat-option>
+                                          </mat-autocomplete>
+
+                                      </mat-form-field>
+
+                                  </div>
+
+                              </td>
+
+                          </tr>
+
+                          <tr>
+
+                              <td>
+
+                                  <div>
+
+                                      <!-- Location -->
+
+                                      <mat-form-field class="example-full-width">
+
+                                          <input type="text"
+                                                 placeholder="Album" aria-label="Album"
+                                                 matInput
+                                                 formControlName="album"
+                                                 (change)="albumForm.valueChanged($event)"
+                                                 [matAutocomplete]="autoAlbum"
+                                                 required>
+
+                                          <mat-autocomplete #autoAlbum="matAutocomplete"
+                                                            (optionSelected)="albumForm.valueChanged($event)">
+
+                                              <mat-option *ngFor="let option of albumForm.filteredValues | async" [value]="option">
+                                                  {{option}}
+                                              </mat-option>
+                                          </mat-autocomplete>
+
+                                      </mat-form-field>
+
+                                  </div>
+
+                              </td>
+
+                          </tr>
+
+                          <tr>
+
+                              <td>
+
+                                  <div>
+
+                                      <!-- Image URL -->
+
+                                      <mat-form-field class="example-full-width">
+
+                                          <input matInput
+                                                 placeholder="Image URL"
+                                                 formControlName="imageUrl"
+                                                 (change)="imageUrlValueChanged($event)"
+                                                 type="url">
+
+                                      </mat-form-field>
+
+                                  </div>
+
+                              </td>
+
+                          </tr>
+
+                          <tr>
+
+                              <td>
+
+                                  <div>
+
+                                      <!-- Image URL -->
+
+                                      <mat-form-field class="example-full-width">
+
+                                          <input matInput
+                                                 placeholder="Player URL"
+                                                 formControlName="playerUrl"
+                                                 (change)="playerUrlValueChanged($event)"
+                                                 type="url">
+
+                                      </mat-form-field>
+
+                                  </div>
+
+                              </td>
+
+                          </tr>
+
+                      </table>
+
+                  </div>
+
+
+                  <div>
+
+                      <table>
+
+                          <tr>
+
+                              <td>
+
+                                  <button [disabled]="!addAlbumGroup.valid"
+                                          mat-raised-button
+                                          color="primary"
+                                          (click)="onAddNewAlbum()">
+                                      Add New Item
+                                  </button>
+
+                              </td>
+
+                              <td>
+
+                                  <button mat-raised-button
+                                          color="warn"
+                                          [disabled]="!addAlbumGroup.valid"
+                                          (click)="onNewAlbumReset()">
+                                      Reset Details
+                                  </button>
+
+                              </td>
+
+                              <td>
+
+                                  <button mat-raised-button
+                                          [disabled]="!addAlbumGroup.valid"
+                                          (click)="onNewAlbumDisplay()">
+                                      Display Details
+                                  </button>
+
+                              </td>
+
+                              <td>
+
+                                  <button mat-raised-button
+                                          [disabled]="!addAlbumGroup.valid"
+                                          (click)="onFindAlbumDetails()">
+                                      Find Details
+                                  </button>
+
+                              </td>
+
+                          </tr>
+
+                      </table>
+
+                  </div>
+
+              </form>
           </td>
 
-        </tr>
+          <td width="50%">
+              <div *ngIf="newAlbumDetailsToSearch">
 
-        <tr>
+                  <app-search-detail
+                      #searchDetail
+                      [artist]="searchAlbum.artist"
+                      [album]="searchAlbum.album">
 
-          <td>
+                  </app-search-detail>
 
-            <div>
-
-              <!-- Artist -->
-
-              <mat-form-field class="example-full-width">
-
-                <input type="text"
-                       placeholder="Artist" aria-label="Artist"
-                       matInput
-                       formControlName="artist"
-                       (change)="artistForm.valueChanged($event)"
-                       [matAutocomplete]="autoArtist"
-                       required>
-
-                <mat-autocomplete #autoArtist="matAutocomplete"
-                                  (optionSelected)="artistForm.valueChanged($event)">
-
-                  <mat-option *ngFor="let option of artistForm.filteredValues | async" [value]="option">
-                    {{option}}
-                  </mat-option>
-                </mat-autocomplete>
-
-              </mat-form-field>
-
-            </div>
-
+              </div>
           </td>
+      </tr>
 
-        </tr>
-
-        <tr>
-
-          <td>
-
-            <div>
-
-              <!-- Location -->
-
-              <mat-form-field class="example-full-width">
-
-                <input type="text"
-                       placeholder="Album" aria-label="Album"
-                       matInput
-                       formControlName="album"
-                       (change)="albumForm.valueChanged($event)"
-                       [matAutocomplete]="autoAlbum"
-                       required>
-
-                <mat-autocomplete #autoAlbum="matAutocomplete"
-                                  (optionSelected)="albumForm.valueChanged($event)">
-
-                  <mat-option *ngFor="let option of albumForm.filteredValues | async" [value]="option">
-                    {{option}}
-                  </mat-option>
-                </mat-autocomplete>
-
-              </mat-form-field>
-
-            </div>
-
-          </td>
-
-        </tr>
-
-        <tr>
-
-          <td>
-
-            <div>
-
-              <!-- Image URL -->
-
-              <mat-form-field class="example-full-width">
-
-                <input matInput
-                       placeholder="Image URL"
-                       formControlName="imageUrl"
-                       (change)="imageUrlValueChanged($event)"
-                       type="url">
-
-              </mat-form-field>
-
-            </div>
-
-          </td>
-
-        </tr>
-
-        <tr>
-
-          <td>
-
-            <div>
-
-              <!-- Image URL -->
-
-              <mat-form-field class="example-full-width">
-
-                <input matInput
-                       placeholder="Player URL"
-                       formControlName="playerUrl"
-                       (change)="playerUrlValueChanged($event)"
-                       type="url">
-
-              </mat-form-field>
-
-            </div>
-
-          </td>
-
-        </tr>
-
-      </table>
-
-    </div>
-    
-    
-    <div>
-
-      <table>
-
-        <tr>
-
-          <td>
-
-            <button [disabled]="!addAlbumGroup.valid"
-                    mat-raised-button
-                    color="primary"
-                    (click)="onAddNewAlbum()">
-              Add New Item
-            </button>
-
-          </td>
-
-          <td>
-
-            <button mat-raised-button
-                    color="warn"
-                    [disabled]="!addAlbumGroup.valid"
-                    (click)="onNewAlbumReset()">
-              Reset Details
-            </button>
-
-          </td>
-
-          <td>
-
-            <button mat-raised-button
-                    [disabled]="!addAlbumGroup.valid"
-                    (click)="onNewAlbumDisplay()">
-              Display Details
-            </button>
-
-          </td>
-
-        </tr>
-
-      </table>
-
-    </div>
-
-  </form>
+  </table>
   
   
   <div *ngIf="newAlbumToDisplay">
@@ -219,7 +250,6 @@
     <app-album-detail [albumPlayed]="newAlbumPlayed">
 
     </app-album-detail>
-
 
   </div>
 

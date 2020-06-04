@@ -1,9 +1,14 @@
-﻿import { Component, OnInit, Output, EventEmitter, AfterViewInit } from '@angular/core';
+﻿import { Component, OnInit, Output, EventEmitter, AfterViewInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
+// Components
+import { SearchDetailComponent } from './../search-detail/search-detail.component';
+
+// Services
 import { DataModelService } from './../../Services/data-model.service';
 import { CurrentLoginService } from './../../Services/current-login.service';
 
+// Models
 import { AlbumPlayed, AlbumPlayedAddResponse } from './../../Models/AlbumPlayed';
 
 import { BaseAlbumEdit } from './../base-album-edit.component';
@@ -46,9 +51,9 @@ export class AddAlbumComponent extends BaseAlbumEdit implements OnInit, AfterVie
 
         await this.dataModelService.addAsyncAlbumPlayed(this.newAlbumPlayed);
 
-        var resp = AlbumPlayedAddResponse.fromData(this.dataModelService.addUserLoginResponse);
+        const resp = AlbumPlayedAddResponse.fromData(this.dataModelService.addUserLoginResponse);
 
-        if (resp == undefined)
+        if (resp === undefined)
         {
             console.log("Error in response");
         }
@@ -64,6 +69,22 @@ export class AddAlbumComponent extends BaseAlbumEdit implements OnInit, AfterVie
         this.newAlbumPlayed = this.getNewAlbumPlayed();
         this.newAlbumToDisplay = true;
     }
+
+    public onFindAlbumDetails(): void
+    {
+        this.searchAlbum = this.getNewAlbumPlayed();
+        this.newAlbumDetailsToSearch = true;
+        console.log("onFindAlbumDetails -> about to display");
+    }
+
+    //#endregion
+
+    //#region Find Details properties
+
+    @ViewChild('searchDetail') searchDetail: SearchDetailComponent;
+
+    newAlbumDetailsToSearch: boolean = false;
+    searchAlbum: AlbumPlayed = new AlbumPlayed();
 
     //#endregion
 }

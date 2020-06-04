@@ -4,7 +4,6 @@ import { DataModelService } from './../../Services/data-model.service';
 import { CurrentLoginService } from './../../Services/current-login.service';
 import { LastFmArtistService } from './../../Services/last-fm-artist.service';
 
-
 export interface SearchArtist {
     mbid: string;
     name: string;
@@ -14,7 +13,6 @@ export interface SearchArtist {
     url: string;
     image: string;
 }
-
 
 export interface SearchAlbum {
     mbid: string;
@@ -30,7 +28,6 @@ export interface AlbumReleasePair
     artist: string;
     album: string;
 }
-
 
 @Component({
     selector: 'app-find-details',
@@ -120,7 +117,7 @@ export class FindDetailsComponent
             this.searchAlbum.mbid = res.album.mbid;
             this.searchAlbum.artist = res.album.artist;
             this.searchAlbum.name = res.album.name;
-            this.searchAlbum.image = res.album.image[2]['#text'];
+            this.searchAlbum.image = res.album.image[3]['#text'];
             this.searchAlbum.url = res.album.url;
 
             if (res.album.wiki !== undefined &&
@@ -149,7 +146,7 @@ export class FindDetailsComponent
 
         await this.lastFmArtistService.asyncSearchForArtist(this.artistName, 'getinfo');
 
-        var res = this.lastFmArtistService.searchForArtistResponse;
+        const res = this.lastFmArtistService.searchForArtistResponse;
 
         if (res === undefined || res === null) 
         {
@@ -166,17 +163,6 @@ export class FindDetailsComponent
             this.searchArtist.mbid = res.artist.mbid;
             this.searchArtist.url = res.artist.url;
         }
-
-        //this.lastFmArtistService.searchForArtist(this.artistName, 'getinfo').subscribe((res: any) => {
-        //    this.searchArtist.name = res.artist.name;
-        //    this.searchArtist.image = res.artist.image[2]['#text'];
-        //    this.searchArtist.listeners = res.artist.stats.listeners;
-        //    this.searchArtist.playcount = res.artist.stats.playcount;
-        //    this.searchArtist.summary = res.artist.bio.summary;
-        //    this.searchArtist.mbid = res.artist.mbid;
-        //    this.searchArtist.url = res.artist.url;
-        //});
-
     }
 
     //#endregion
@@ -186,22 +172,15 @@ export class FindDetailsComponent
     public async onSearchForArtistAlbum()
     {
         console.log('onSearchForArtistAlbum button press');
-        //this.newTemplateIndex++;
-        //this.artistName = this.albums[this.newTemplateIndex % this.artistNames.length].artist;
-        //this.albumName = this.albums[this.newTemplateIndex % this.artistNames.length].album;
 
-
-         this.artistName = this.searchArtistStr;
-         this.albumName = this.searchAlbumStr;
+        this.artistName = this.searchArtistStr;
+        this.albumName = this.searchAlbumStr;
 
         this.selectedTemplateName = "New Template #" + this.newTemplateIndex.toString();
-
-        //this.searchArtistLastFm();
 
         await this.asyncSearchArtistLastFm();
 
         this.searchAlbumLastFm();
-
     }
 
     //#endregion

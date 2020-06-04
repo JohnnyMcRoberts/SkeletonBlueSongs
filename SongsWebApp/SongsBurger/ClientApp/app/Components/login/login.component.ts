@@ -7,6 +7,15 @@ import { AddUserLoginService } from './../../Services/add-user-login.service';
 import { CurrentLoginService } from './../../Services/current-login.service';
 import { LoginService } from './../../Services/login.service';
 
+
+export const passwordMatchValidator: ValidatorFn = (formGroup: FormGroup): ValidationErrors | null => 
+{
+    if (formGroup.get('password').value === formGroup.get('password2').value)
+        return null;
+    else
+        return { passwordMismatch: true };
+};
+
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -113,7 +122,7 @@ export class LoginComponent implements OnInit
     {
         console.log('onNewUserSubmitted -> newUserName : ', this.newUserFormGroup.value.newUserName);
 
-        var addUserReq: UserAddRequest =
+        const addUserReq: UserAddRequest =
             new UserAddRequest(this.newUserFormGroup.value.newUserName,
                 this.newUserFormGroup.value.password,
                 this.newUserFormGroup.value.newUserDescription,
@@ -121,9 +130,9 @@ export class LoginComponent implements OnInit
 
         await this.addUserLoginService.getAsyncUserAdd(addUserReq);
 
-        var resp = this.addUserLoginService.addUserLoginResponse;
+        const resp = this.addUserLoginService.addUserLoginResponse;
 
-        if (resp == undefined)
+        if (resp === undefined)
         {
             console.log("Error in response");
         }
@@ -131,14 +140,14 @@ export class LoginComponent implements OnInit
         {
             console.log("Response OK");
 
-            var addResponse: UserAddResponse = UserAddResponse.fromData(resp);
+            const addResponse: UserAddResponse = UserAddResponse.fromData(resp);
 
             if (addResponse.errorCode === 0)
             {
                 this.addUserLoginSuccessString = "Added New User Id: " + addResponse.userId;
                 this.addUserLoginErrorString = '';
 
-                var userLogin: UserLogin =
+                const userLogin: UserLogin =
                     new UserLogin(
                         this.newUserFormGroup.value.newUserName,
                         this.newUserFormGroup.value.newUserDescription,
@@ -191,14 +200,14 @@ export class LoginComponent implements OnInit
     {
         console.log('onExistingUserSubmitted -> Name : ', this.existingUserFormGroup.value.existingUserName);
 
-        var userLoginReq: UserLoginRequest =
+        const userLoginReq: UserLoginRequest =
             new UserLoginRequest(this.existingUserFormGroup.value.existingUserName, this.existingUserFormGroup.value.existingUserPassword);
 
         await this.loginService.asyncUserLogin(userLoginReq);
 
-        var resp = this.loginService.userLoginResponse;
+        const resp = this.loginService.userLoginResponse;
 
-        if (resp == undefined)
+        if (resp === undefined)
         {
             console.log("Error in response");
         }
@@ -206,15 +215,14 @@ export class LoginComponent implements OnInit
         {
             console.log("Response OK");
 
-            var loginResponse: UserLoginResponse = UserLoginResponse.fromData(resp);
+            const loginResponse: UserLoginResponse = UserLoginResponse.fromData(resp);
 
             if (loginResponse.errorCode === 0)
             {
                 this.existingUserLoginSuccessString = "Logged in successfully with User Id: " + loginResponse.userId;
                 this.existingUserLoginErrorString = '';
-                //this.existingUserFormGroup.existingUserName;
 
-                var userLogin: UserLogin =
+                const userLogin: UserLogin =
                     new UserLogin(
                         loginResponse.name,
                         loginResponse.description,
@@ -245,11 +253,3 @@ export class LoginComponent implements OnInit
     //#endregion
 
 }
-
-export const passwordMatchValidator: ValidatorFn = (formGroup: FormGroup): ValidationErrors | null =>
-{
-    if (formGroup.get('password').value === formGroup.get('password2').value)
-        return null;
-    else
-        return { passwordMismatch: true };
-};
