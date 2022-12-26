@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30002.166
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SongsBurger", "SongsBurger\SongsBurger.csproj", "{930361B6-20C1-4A1F-847A-1DAB0B50030E}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SongsFileImportExport", "SongsFileImportExport\SongsFileImportExport.csproj", "{26B9A3EB-871E-4299-AB18-79328CF33468}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SongsFileImportExport.Test", "Test\SongsFileImportExport.Test\SongsFileImportExport.Test.csproj", "{484BF3F5-4F61-41A1-B050-8E921A216740}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SongsApi", "SongsApi\SongsApi.csproj", "{7C2B3334-237F-4E81-8158-03122ACC86A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{484BF3F5-4F61-41A1-B050-8E921A216740}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{484BF3F5-4F61-41A1-B050-8E921A216740}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{484BF3F5-4F61-41A1-B050-8E921A216740}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C2B3334-237F-4E81-8158-03122ACC86A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C2B3334-237F-4E81-8158-03122ACC86A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C2B3334-237F-4E81-8158-03122ACC86A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C2B3334-237F-4E81-8158-03122ACC86A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

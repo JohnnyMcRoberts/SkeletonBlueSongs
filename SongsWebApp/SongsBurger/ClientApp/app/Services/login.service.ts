@@ -2,6 +2,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { UserLoginRequest, UserLoginResponse } from './../Models/User';
+import { environment } from '../../environments/environment';
 
 const httpOptions =
 {
@@ -15,7 +16,7 @@ export class LoginService
 {
     constructor(private http: HttpClient)
     {
-        this.requestUserLoginUrl = 'api/UserLogin/';
+        this.requestUserLoginUrl = environment.baseApi + 'api/UserLogin/';
     }
 
     public requestUserLoginUrl: string;
