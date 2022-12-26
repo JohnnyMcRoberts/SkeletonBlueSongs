@@ -5,6 +5,7 @@ import { AlbumPlayed, AlbumPlayedAddResponse } from './../Models/AlbumPlayed';
 
 import { SongsValuesDetails, SongsFilesDetailsResponse } from './../Models/SongsFilesDetails';
 import { ExportText } from './../Models/ExportText';
+import { environment } from '../../environments/environment';
 
 const httpOptions =
 {
@@ -16,7 +17,7 @@ export class DataModelService
 {
     constructor(private http: HttpClient)
     {
-        this.requestUrl = 'api/DataModel/';
+        this.requestUrl = environment.baseApi + 'api/DataModel/';
     }
 
     public requestUrl: string;

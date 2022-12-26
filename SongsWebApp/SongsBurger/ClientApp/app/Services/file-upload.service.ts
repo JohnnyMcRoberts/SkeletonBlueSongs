@@ -1,6 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HttpRequest, HttpEventType } from '@angular/common/http'
+import { environment } from '../../environments/environment';
 
 const httpOptions =
 {
@@ -13,7 +14,7 @@ export class FileUploadService
     constructor(http: HttpClient)
     {
         this.http = http;
-        this.requestUrl = 'api/FileUpload/';
+        this.requestUrl = environment.baseApi + 'api/FileUpload/';
     }
 
     public progress: number;

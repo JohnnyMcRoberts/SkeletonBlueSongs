@@ -2,6 +2,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { SongsFilesDetailsRequest, SongsFilesDetailsResponse } from './../Models/SongsFilesDetails';
+import { environment } from '../../environments/environment';
 
 const httpOptions =
 {
@@ -14,7 +15,7 @@ export class SongsFilesDetailsService
 {
     constructor(private http: HttpClient)
     {
-        this.requestUrl = 'api/SongsFilesDetails/';
+        this.requestUrl = environment.baseApi + 'api/SongsFilesDetails/';
     }
 
     public requestUrl: string;
