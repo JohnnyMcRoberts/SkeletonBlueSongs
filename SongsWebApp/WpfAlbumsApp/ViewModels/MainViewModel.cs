@@ -1,25 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-
 using System.Windows.Input;
-using System.IO;
-using System.Xml;
-using System.Collections.ObjectModel;
 using System.Windows.Forms;
-using SongsFileImportExport.Parser;
+
 using SongsDatabase.DataModels;
+
+using SongsFileImportExport.Parser;
 using SongsFileImportExport.Exporter;
 
 namespace WpfAlbumsApp.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-
         #region INotifyPropertyChanged Members
 
         void OnPropertyChanged<T>(Expression<Func<T>> sExpression)
@@ -48,9 +44,9 @@ namespace WpfAlbumsApp.ViewModels
         #region Private variables
 
         /// <summary>
-        /// The select playlist command.
+        /// The select playlists command.
         /// </summary>
-        private ICommand _selectPlaylistCommand;
+        private ICommand _selectPlaylistsCommand;
 
         /// <summary>
         /// The select listened albums command.
@@ -60,7 +56,7 @@ namespace WpfAlbumsApp.ViewModels
         /// <summary>
         /// The select output directory command.
         /// </summary>
-        private ICommand _selectOutputDirectoryCommand;        
+        private ICommand _selectOutputDirectoryCommand;
 
         /// <summary>
         /// The show playlist command.
@@ -77,12 +73,23 @@ namespace WpfAlbumsApp.ViewModels
         /// </summary>
         private ICommand _exportListenedAlbumsYearCommand;
 
+        /// <summary>
+        /// The export added albums command.
+        /// </summary>
+        private ICommand _exportAddedAlbumsCommand;
+
         #endregion
 
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets the playlist file to expand.
+        /// Gets or sets the playlists files to work with.
+        /// </summary>
+        public ObservableCollection<string> Playlists { get; private set; }
+            = new ObservableCollection<string>();
+
+        /// <summary>
+        /// Gets or sets the display to file to expand.
         /// </summary>
         public string Playlist { get; private set; }
 
@@ -104,6 +111,13 @@ namespace WpfAlbumsApp.ViewModels
 
 
         /// <summary>
+        /// Gets the albums added to the library to display.
+        /// </summary>
+        public ObservableCollection<AlbumPlayed> AlbumsAdded{ get; private set; }
+            = new ObservableCollection<AlbumPlayed>();
+
+
+        /// <summary>
         /// Gets the listened to albums to display.
         /// </summary>
         public ObservableCollection<int> Years { get; private set; }
@@ -113,22 +127,22 @@ namespace WpfAlbumsApp.ViewModels
         /// Gets or sets the listened to year to get.
         /// </summary>
         public int SelectedYear { get; set; } = 0;
-        
+
 
         #endregion
 
         #region Commands 
 
         /// <summary>
-        /// Select the playlist command.
+        /// Select the playlists command.
         /// </summary>
-        public ICommand SelectPlaylistCommand
+        public ICommand SelectPlaylistsCommand
         {
             get
             {
-                return _selectPlaylistCommand ??
-                    (_selectPlaylistCommand =
-                        new CommandHandler(() => SelectPlaylistCommandAction(), true));
+                return _selectPlaylistsCommand ??
+                    (_selectPlaylistsCommand =
+                        new CommandHandler(() => SelectPlaylistsCommandAction(), true));
             }
         }
 
@@ -158,7 +172,7 @@ namespace WpfAlbumsApp.ViewModels
             }
         }
 
-        
+
 
         /// <summary>
         /// Show the playlist command.
@@ -199,7 +213,20 @@ namespace WpfAlbumsApp.ViewModels
                         new CommandHandler(() => ExportListenedAlbumsYearCommandAction(), true));
             }
         }
-        
+
+        /// <summary>
+        /// Export the Added Albums for a year command.
+        /// </summary>
+        public ICommand ExportAddedAlbumsCommand
+        {
+            get
+            {
+                return _exportAddedAlbumsCommand ??
+                    (_exportAddedAlbumsCommand =
+                        new CommandHandler(() => ExportAddedAlbumsCommandAction(), true));
+            }
+        }
+
         #endregion
 
         #region Command Handlers
@@ -207,16 +234,24 @@ namespace WpfAlbumsApp.ViewModels
         /// <summary>
         /// Selects the playlist file to copy from.
         /// </summary>
-        public void SelectPlaylistCommandAction()
+        public void SelectPlaylistsCommandAction()
         {
             using (OpenFileDialog fileDialog = new OpenFileDialog())
             {
                 fileDialog.Filter = @"WPL File (.wpl)|*.wpl";
                 fileDialog.FilterIndex = 4;
                 fileDialog.RestoreDirectory = true;
+                fileDialog.Multiselect = true;
 
                 if (fileDialog.ShowDialog() == DialogResult.OK)
                 {
+                    Playlists.Clear();
+                    foreach (string file in fileDialog.FileNames)
+                    {
+                        Playlists.Add(file);
+                    }
+
+                        
                     Playlist = fileDialog.FileName;
                     OnPropertyChanged(() => Playlist);
                 }
@@ -258,13 +293,32 @@ namespace WpfAlbumsApp.ViewModels
                 }
             }
         }
-        
+
 
         /// <summary>
         /// Shows the playlist file to copy from.
         /// </summary>
         public void ShowPlaylistCommandAction()
         {
+            if (Playlists.Any() && OutputDirectory.Length > 0)
+            {
+                List<AlbumPlayed> allAlbumsInPlaylists =
+                    new List<AlbumPlayed>();
+                foreach (string file in Playlists)
+                {
+
+                    List<AlbumPlayed> albumsInPlaylist =
+                        PlaylistAlbumsParserWpl.GetAlbumsAddedFromPlaylist(file);
+                    allAlbumsInPlaylists.AddRange(albumsInPlaylist);    
+                }
+
+                AlbumsAdded.Clear();
+                foreach (AlbumPlayed album in allAlbumsInPlaylists)
+                {
+                    AlbumsAdded.Add(album);
+                }
+
+            }
         }
 
         /// <summary>
@@ -285,7 +339,7 @@ namespace WpfAlbumsApp.ViewModels
 
                 List<int> years = results.Select(x => x.Date.Year).Distinct().ToList();
                 Years.Clear();
-                foreach(int year in years)
+                foreach (int year in years)
                 {
                     Years.Add(year);
                 }
@@ -295,7 +349,7 @@ namespace WpfAlbumsApp.ViewModels
 
 
         /// <summary>
-        /// Shows the listened albums file to copy from.
+        /// Exports the listened to albums to a file.
         /// </summary>
         public void ExportListenedAlbumsYearCommandAction()
         {
@@ -304,30 +358,57 @@ namespace WpfAlbumsApp.ViewModels
                 List<AlbumPlayed> albumsForYear =
                     AlbumsListenedTo.Where(x => x.Date.Year == SelectedYear).ToList();
 
-                string fileName =
-                    OutputDirectory + "\\Listened-to" + SelectedYear + ".csv";
+                List<AlbumPlayed> albumsInOrder = GetAlbumsListenedToInOrder(albumsForYear);
 
-                AlbumsPlayedToCsvExporter.ExportToFile(albumsForYear, fileName);
+                string fileName = OutputDirectory + "\\Listened-to" + SelectedYear + ".csv";
 
-                Dictionary<string, List<AlbumPlayed>> albumsPlayed =
-                    new Dictionary<string, List<AlbumPlayed>>();
+                AlbumsPlayedToCsvExporter.ExportToFile(albumsInOrder, fileName);
+            }
+        }
 
-                foreach(AlbumPlayed album in albumsForYear)
+
+        /// <summary>
+        /// Exports the listened to albums to a file.
+        /// </summary>
+        public void ExportAddedAlbumsCommandAction()
+        {
+            if (AlbumsAdded.Any() && OutputDirectory.Length > 0)
+            {
+                List<AlbumPlayed> albumsInOrder = AlbumsAdded.ToList();
+
+                string fileName = OutputDirectory + "\\AddedAlbums.csv";
+
+                AlbumsPlayedToCsvExporter.ExportToFile(albumsInOrder, fileName);
+            }
+        }
+
+
+        private static List<AlbumPlayed> GetAlbumsListenedToInOrder(List<AlbumPlayed> albumsForYear)
+        {
+            Dictionary<string, List<AlbumPlayed>> albumsPlayed =
+                new Dictionary<string, List<AlbumPlayed>>();
+
+            foreach (AlbumPlayed album in albumsForYear)
+            {
+                string albumTitle = album.Artist + " - " + album.Album;
+                if (albumsPlayed.ContainsKey(albumTitle))
                 {
-                    string albumTitle = album.Artist + " - " + album.Album;
-                    if(albumsPlayed.ContainsKey(albumTitle))
-                    {
-                        albumsPlayed[albumTitle].Add(album);
-                    }
-                    else
-                    {
-                        albumsPlayed.Add(albumTitle, new List<AlbumPlayed>() { album });
-                    }
+                    albumsPlayed[albumTitle].Add(album);
                 }
-
-                var allAlbumsPlayed = albumsPlayed;
+                else
+                {
+                    albumsPlayed.Add(albumTitle, new List<AlbumPlayed>() { album });
+                }
             }
 
+            List<string> albumNames = albumsPlayed.Keys.OrderBy(x => x).ToList();
+            List<AlbumPlayed> albumsInOrder = new List<AlbumPlayed>();
+            foreach (string albumName in albumNames)
+            {
+                albumsInOrder.Add(albumsPlayed[albumName].First());
+            }
+
+            return albumsInOrder;
         }
 
         #endregion

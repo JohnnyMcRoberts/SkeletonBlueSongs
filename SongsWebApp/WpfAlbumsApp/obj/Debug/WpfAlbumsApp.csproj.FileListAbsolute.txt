@@ -76,3 +76,4 @@ C:\Users\John McRoberts\source\repos\SkeletonBlueSongs\SongsWebApp\WpfAlbumsApp\
 C:\Users\John McRoberts\source\repos\SkeletonBlueSongs\SongsWebApp\WpfAlbumsApp\bin\Debug\Microsoft.Bcl.HashCode.dll
 C:\Users\John McRoberts\source\repos\SkeletonBlueSongs\SongsWebApp\WpfAlbumsApp\bin\Debug\CsvHelper.xml
 C:\Users\John McRoberts\source\repos\SkeletonBlueSongs\SongsWebApp\WpfAlbumsApp\bin\Debug\Microsoft.Bcl.HashCode.xml
+C:\Users\John McRoberts\source\repos\SkeletonBlueSongs\SongsWebApp\WpfAlbumsApp\bin\Debug\PlaylistsNET.dll
