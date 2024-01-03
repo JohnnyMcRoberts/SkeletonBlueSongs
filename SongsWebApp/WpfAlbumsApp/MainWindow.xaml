@@ -1,0 +1,207 @@
+﻿<Window x:Class="WpfAlbumsApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfAlbumsApp"
+        mc:Ignorable="d" Height="450" Width="800"
+        Title="Playlist To Albums list" >
+    <Grid>
+
+        <TabControl>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="10" Height="10" Fill="DarkGray"/>
+                        <TextBlock>From Listened to</TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="100*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="300*"/>
+                        <ColumnDefinition Width="180"/>
+
+                    </Grid.ColumnDefinitions>
+
+
+
+
+                    <Label Grid.Row="0" Grid.Column="0" 
+                           Content="Listened To" 
+                           HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="0" Grid.Column="1"  
+                             HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" 
+                             Text="{Binding ListenedAlbums, Mode=OneWay}" VerticalAlignment="Center"  
+                             Margin="10,0,10,0"/>
+                    <Button Grid.Row="0" Grid.Column="2"  
+                            Content="Select Listened" 
+                            HorizontalAlignment="Center"  VerticalAlignment="Center" Width="165"
+                            Command="{Binding Path=SelectListenedAlbumsCommand}" />
+
+
+
+                    <Label Grid.Row="1" Grid.Column="0" 
+                           Content="Output Directory" 
+                           HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="1" Grid.Column="1"  
+                             HorizontalAlignment="Stretch"  Height="23" TextWrapping="Wrap" IsReadOnly="True"
+                             Text="{Binding OutputDirectory, Mode=OneWay}" VerticalAlignment="Center"  
+                             Margin="10,0,10,0"/>
+                    <Button Grid.Row="1" Grid.Column="2"  
+                            Content="Select Output Directory" 
+                            HorizontalAlignment="Center"  VerticalAlignment="Center" Width="165"
+                            Command="{Binding Path=SelectOutputDirectoryCommand}" />
+
+
+
+                    <ComboBox Name="comboBoxYears"  Grid.Row="2" Grid.Column="1"
+                            ItemsSource="{Binding Path=Years}"
+                            Text="Years"
+                            IsEditable="true"
+                            IsReadOnly="true"
+                            SelectedValue="{Binding Path=SelectedYear}"  
+                            Margin="10,0,10,0"/>
+
+                        <TextBlock   Grid.Row="3" Grid.Column="1"
+                            Text="{Binding ElementName=comboBoxYears, Path=SelectedItem}"/>
+
+
+
+                        <Button Content="Show Listened"  Grid.Row="2" Grid.Column="2"
+                                HorizontalAlignment="Center"  VerticalAlignment="Center" Width="165"
+                                Command="{Binding Path=ShowListenedAlbumsCommand}" />
+
+
+                        <Button Content="Export Year File"  Grid.Row="3" Grid.Column="2"
+                                HorizontalAlignment="Center"  VerticalAlignment="Center" Width="165" 
+                                Command="{Binding Path=ExportListenedAlbumsYearCommand}" />
+
+
+
+                        <DataGrid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="4" AutoGenerateColumns="False"
+                                    ItemsSource="{Binding Path=AlbumsListenedTo, Mode=OneWay}"
+                                    IsReadOnly="True" HorizontalScrollBarVisibility="Auto">
+
+                        <DataGrid.Columns>
+
+
+                            <DataGridTextColumn Header="Date" 
+                                                Binding="{Binding Date, StringFormat=d}" 
+                                                Width="Auto"/>
+
+                            <DataGridTextColumn Header="Artist" 
+                                                Binding="{Binding Artist}" 
+                                                MinWidth="150"/>
+
+                            <DataGridTextColumn Header="Album" 
+                                                Binding="{Binding Album}" 
+                                                Width="Auto"/>
+
+                            <DataGridTextColumn Header="Location" 
+                                                Binding="{Binding Location}" 
+                                                Width="Auto"/>
+
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="From Playlists">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="100*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="300*"/>
+                        <ColumnDefinition Width="180"/>
+
+                    </Grid.ColumnDefinitions>
+
+
+                    <Label Grid.Row="0" Grid.Column="0" 
+                           Content="Playlist" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="0" Grid.Column="1"  
+                             HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" 
+                             Text="{Binding Playlist, Mode=OneWay}" VerticalAlignment="Center"  
+                             Margin="10,0,10,0"/>
+                    <Button Grid.Row="0" Grid.Column="2"  
+                            Content="Select Playlists" HorizontalAlignment="Center"  VerticalAlignment="Center" 
+                            Width="165"
+                            Command="{Binding Path=SelectPlaylistsCommand}" />
+
+
+
+                    <Label Grid.Row="1" Grid.Column="0" 
+                           Content="Output Directory" 
+                           HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="1" Grid.Column="1"  
+                             HorizontalAlignment="Stretch"  Height="23" TextWrapping="Wrap" IsReadOnly="True"
+                             Text="{Binding OutputDirectory, Mode=OneWay}" VerticalAlignment="Center"  
+                             Margin="10,0,10,0"/>
+                    <Button Grid.Row="1" Grid.Column="2"  
+                            Content="Select Output Directory" 
+                            HorizontalAlignment="Center"  VerticalAlignment="Center" Width="165"
+                            Command="{Binding Path=SelectOutputDirectoryCommand}" />
+
+
+
+                    <Button Grid.Row="2" Grid.Column="1"  
+                            Content="Show Playlists" 
+                            HorizontalAlignment="Center"  VerticalAlignment="Center" Width="165"
+                                            Command="{Binding Path=ShowPlaylistCommand}" />
+
+                    <Button Grid.Row="2" Grid.Column="2"  
+                            Content="Export Albums Added" 
+                            HorizontalAlignment="Center"  VerticalAlignment="Center" Width="165"
+                                            Command="{Binding Path=ExportAddedAlbumsCommand}" />
+
+
+
+
+                    <DataGrid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3" AutoGenerateColumns="False"
+                                    ItemsSource="{Binding Path=AlbumsAdded, Mode=OneWay}"
+                                    IsReadOnly="True" HorizontalScrollBarVisibility="Auto">
+
+                        <DataGrid.Columns>
+
+
+                            <DataGridTextColumn Header="Date" 
+                                                Binding="{Binding Date, StringFormat=d}" 
+                                                Width="Auto"/>
+
+                            <DataGridTextColumn Header="Artist" 
+                                                Binding="{Binding Artist}" 
+                                                MinWidth="150"/>
+
+                            <DataGridTextColumn Header="Album" 
+                                                Binding="{Binding Album}" 
+                                                Width="Auto"/>
+
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+
+
+    </Grid>
+</Window>

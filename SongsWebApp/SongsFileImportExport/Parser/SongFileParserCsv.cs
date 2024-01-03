@@ -4,6 +4,7 @@ namespace SongsFileImportExport.Parser
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
 
@@ -19,25 +20,28 @@ namespace SongsFileImportExport.Parser
             if (!File.Exists(filePath))
                 return albums;
 
-            using (var reader = new StreamReader(filePath))
-            using (var csv = new CsvReader(reader))
+            using (TextReader reader = new StreamReader(filePath))
             {
-                csv.Configuration.HasHeaderRecord = true;
-                csv.Configuration.BadDataFound = null;
-                var records = csv.GetRecords<ExportAlbum>();
-                foreach (var record in records)
+
+                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
-                    albums.Add(
-                        new AlbumPlayed
-                        {
-                            Album = record.album,
-                            Artist = record.artist,
-                            Date = record.date,
-                            ImagePath = record.imagePath,
-                            Location = record.location,
-                            PlayerLink = record.playerLink,
-                            UserName = record.userName
-                        });
+                    //csv.Configuration.HasHeaderRecord = true;
+                    //csv.Configuration.BadDataFound = null;
+                    var records = csv.GetRecords<ExportAlbum>();
+                    foreach (var record in records)
+                    {
+                        albums.Add(
+                            new AlbumPlayed
+                            {
+                                Album = record.album,
+                                Artist = record.artist,
+                                Date = record.date,
+                                ImagePath = record.imagePath,
+                                Location = record.location,
+                                PlayerLink = record.playerLink,
+                                UserName = record.userName
+                            });
+                    }
                 }
             }
 
